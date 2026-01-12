@@ -12,7 +12,7 @@ static void timer_cb(uv_timer_t *handle) {
     lv_timer_handler();
 }
 
-int main(int argc, char **argv) {
+void EngineInit(int argc, char **argv) {
     TJS_Initialize(argc, argv);
 
     qrt = TJS_NewRuntime();
@@ -42,7 +42,9 @@ int main(int argc, char **argv) {
     } else if (uv_timer_start(&handle, timer_cb, 30, 30) != 0) {
         printf("uv_timer_start failed\n");
     }
+}
 
+int EngineRun() {
     int exit_code = TJS_Run(qrt);
 
     TJS_FreeRuntime(qrt);
