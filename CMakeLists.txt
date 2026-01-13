@@ -9,6 +9,9 @@ set(BUILD_NATIVE OFF CACHE BOOL "Build wasm3 with native support")
 
 option(BUILD_STATIC_LIB "Build as static library (.a) instead of executable" OFF)
 
+set(DISP_HOR_RES 1024 CACHE STRING "Display horizontal resolution")
+set(DISP_VER_RES 600 CACHE STRING "Display vertical resolution")
+
 find_path(LVGL_PATH lvgl.h PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps PATH_SUFFIXES lvgl)
 
 set(LVGLJS_SOURCES
@@ -116,6 +119,11 @@ target_include_directories(lvgljs PUBLIC
     src/render/native/bootstrap
     src/render/native/components
     src/render/native/core
+)
+
+target_compile_definitions(lvgljs PRIVATE
+    DISP_HOR_RES=${DISP_HOR_RES}
+    DISP_VER_RES=${DISP_VER_RES}
 )
 
 target_link_libraries(lvgljs PUBLIC
