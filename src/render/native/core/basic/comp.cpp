@@ -1,6 +1,7 @@
 #include "./comp.hpp"
 
 #include "native/core/utils/utils.hpp"
+#include "native/core/group/group_manager.hpp"
 
 std::unordered_map<std::string, BasicComponent*> comp_map;
 
@@ -46,13 +47,24 @@ void BasicComponent::insertChildBefore(void *child) {
 };
 
 void BasicComponent::removeChild(void* child) {
-    lv_obj_del_async((static_cast<BasicComponent*>(child))->instance);
+    BasicComponent* childComp = static_cast<BasicComponent*>(child);
+    
+    if (GroupManager::getInstance().isContainerRegistered(this)) {
+        GroupManager::getInstance().removeFromGroup(childComp->instance);
+    }
+    
+    lv_obj_del_async(childComp->instance);
 };
 
 void BasicComponent::appendChild (void* child) {
-    static_cast<BasicComponent*>(child)->parent_instance = this->instance;
-    if (!(static_cast<BasicComponent*>(child)->is_fixed) && (static_cast<BasicComponent*>(child)->type != COMP_TYPE_MASK)) {
-        lv_obj_set_parent((static_cast<BasicComponent*>(child))->instance, this->instance);
+    BasicComponent* childComp = static_cast<BasicComponent*>(child);
+    childComp->parent_instance = this->instance;
+    if (!childComp->is_fixed && childComp->type != COMP_TYPE_MASK) {
+        lv_obj_set_parent(childComp->instance, this->instance);
+    }
+    
+    if (GroupManager::getInstance().isContainerRegistered(this)) {
+        GroupManager::getInstance().addToGroup(childComp->instance);
     }
 };
 
@@ -234,6 +246,7 @@ void BasicComponent::setBackgroundImage (uint8_t* buf, size_t buf_len, int32_t s
 };
 
 BasicComponent::~BasicComponent () {
+    GroupManager::getInstance().unregisterContainer(this);
     comp_map.erase(this->uid);
 
     const lv_coord_t* ptr1 = this->grid_row_desc;

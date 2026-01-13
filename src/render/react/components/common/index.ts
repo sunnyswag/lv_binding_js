@@ -56,6 +56,7 @@ export type CommonProps = {
     currentTarget: any,
     stopPropogation: () => void,
   }) => void;
+  onFocusedStyle?: StyleProps;
 };
 
 export type OnChangeEvent = {
@@ -161,6 +162,15 @@ export const CommonComponentApi = function ({
     },
     onReleased(fn) {
       handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_RELEASED);
+    },
+    onFocusedStyle(styleSheet) {
+      setStyle({
+        comp,
+        styleSheet,
+        compName,
+        styleType: STYLE_TYPE.STATE_FOCUSED,
+        oldStyleSheet: oldProps.onFocusedStyle,
+      });
     },
   };
 };

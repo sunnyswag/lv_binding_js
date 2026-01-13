@@ -32,6 +32,7 @@ set(LVGLJS_SOURCES
     src/render/native/core/theme/theme.cpp
     src/render/native/core/dimensions/dimensions.cpp
     src/render/native/core/basic/comp.cpp
+    src/render/native/core/group/group_manager.cpp
     src/render/native/core/event/event.cpp
     src/render/native/core/img/png/lodepng.cpp
     src/render/native/core/img/png/png.cpp

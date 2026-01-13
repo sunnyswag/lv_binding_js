@@ -1,4 +1,5 @@
 #include "view.hpp"
+#include "native/core/group/group_manager.hpp"
 
 static JSClassID ViewClassID;
 
@@ -16,6 +17,18 @@ WRAPPED_MOVE_TO_BACKGROUND(View, "View")
 WRAPPED_SCROLL_INTO_VIEW(View, "View")
 WRAPPED_JS_CLOSE_COMPONENT(View, "View")
 
+static JSValue NativeCompSetInGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
+    if (argc >= 1 && JS_IsBool(argv[0])) {
+        COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ViewClassID);
+        bool value = JS_ToBool(ctx, argv[0]);
+        
+        if (value) {
+            GroupManager::getInstance().registerContainer((BasicComponent*)(ref->comp));
+        }
+    }
+    return JS_UNDEFINED;
+}
+
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
     TJS_CFUNC_DEF("addEventListener", 0, NativeCompAddEventListener),
@@ -31,6 +44,7 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("moveToBackground", 0, NativeCompMoveToBackground),
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),
     TJS_CFUNC_DEF("close", 0, NativeCompCloseComponent),
+    TJS_CFUNC_DEF("setInGroup", 1, NativeCompSetInGroup),
 };
 
 static const JSCFunctionListEntry ComponentClassFuncs[] = {

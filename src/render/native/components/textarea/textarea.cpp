@@ -5,7 +5,6 @@ Textarea::Textarea(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
     this->type = COMP_TYPE_TEXTAREA;
     this->uid = uid;
     this->instance = lv_textarea_create(parent != nullptr ? parent : GetWindowInstance());
-    lv_group_add_obj(lv_group_get_default(), this->instance);
 
     lv_obj_set_user_data(this->instance, this);
     lv_obj_add_flag(this->instance, LV_OBJ_FLAG_CLICK_FOCUSABLE);
