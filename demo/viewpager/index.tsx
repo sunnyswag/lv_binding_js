@@ -1,0 +1,180 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Button, Dimensions, Render, Text, View } from "lvgljs-ui";
+
+const { width, height } = Dimensions.window;
+
+/**
+ * 纯 View + flex + scroll-snap 的 “ViewPager” demo
+ *
+ * - pager: 横向 flex 容器，可滚动
+ * - page: 每页固定宽高，并开启 snappable
+ * - 导航点: 底部一排小圆点 + prev/next 按钮（方便在没手势时测试）
+ */
+function App() {
+  const pageCount = 4;
+  const pagerRef = useRef<any>();
+  const pageRefs = useRef<any[]>([]);
+
+  const [active, setActive] = useState(0);
+
+  const pageColors = useMemo(
+    () => ["red", "blue", "green", "orange"],
+    []
+  );
+
+  const scrollTo = (idx: number) => {
+    const n = Math.max(0, Math.min(pageCount - 1, idx));
+    setActive(n);
+    // 让对应 page 滚动进可视区域（LVGL 内部会按 snap 对齐）
+    pageRefs.current[n]?.scrollIntoView?.();
+  };
+
+  useEffect(() => {
+    // 初始定位到第 0 页
+    scrollTo(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <View style={style.root}>
+      <View
+        ref={pagerRef}
+        style={style.pager}
+      >
+        {Array.from({ length: pageCount }).map((_, i) => (
+          <View
+            key={i}
+            ref={(ins) => (pageRefs.current[i] = ins)}
+            style={[
+              style.page,
+              { "background-color": pageColors[i % pageColors.length] },
+            ]}
+          >
+            <Text style={style.pageTitle}>Page {i + 1}</Text>
+            <Text style={style.pageDesc}>
+              flex-row + scroll-snap-x + scrollIntoView()
+            </Text>
+          </View>
+        ))}
+      </View>
+
+      <View style={style.controls}>
+        <Button
+          style={style.navBtn}
+          onClick={() => scrollTo(active - 1)}
+        >
+          <Text>{"<"}</Text>
+        </Button>
+
+        <View style={style.dots}>
+          {Array.from({ length: pageCount }).map((_, i) => (
+            <View
+              key={i}
+              style={[
+                style.dot,
+                i === active ? style.dotActive : style.dotInactive,
+              ]}
+            />
+          ))}
+        </View>
+
+        <Button
+          style={style.navBtn}
+          onClick={() => scrollTo(active + 1)}
+        >
+          <Text>{">"}</Text>
+        </Button>
+      </View>
+    </View>
+  );
+}
+
+const style: Record<string, any> = {
+  root: {
+    width,
+    height,
+    padding: 0,
+    "border-width": 0,
+    "border-radius": 0,
+    "background-color": "black",
+  },
+
+  // 横向滚动容器
+  pager: {
+    width,
+    height: height - 80,
+    "border-width": 0,
+    "border-radius": 0,
+
+    // flex 横向排布
+    display: "flex",
+    "flex-flow": 0, // LV_FLEX_FLOW_ROW（用数值是为了符合你们 style.cpp 的 JS_ToInt32）
+
+    // 开启滚动 + 惯性
+    overflow: 0, // 0 -> add_flag(SCROLLABLE)
+    "overflow-scrolling": 1,
+
+    // 开启 X 方向 snap（枚举值见 LV_SCROLL_SNAP_*）
+    "scroll-snap-x": 2, // 通常 2=LV_SCROLL_SNAP_CENTER（不同版本可能略有差异；看效果不对再调）
+  },
+
+  // 每一页：固定为一屏大小，并允许被 snap
+  page: {
+    width,
+    height: height - 80,
+    "border-radius": 0,
+    "border-width": 0,
+    "padding": 16,
+    "scroll-enable-snap": 1,
+  },
+
+  pageTitle: {
+    "text-color": "white",
+  },
+  pageDesc: {
+    "text-color": "white",
+  },
+
+  controls: {
+    width,
+    height: 80,
+    display: "flex",
+    "flex-flow": 0, // row
+    "justify-content": 3, // space-evenly（你们 style.cpp 直接把 int cast 成 lv_flex_align_t）
+    "align-items": 2, // center
+    "background-color": "grey",
+  },
+
+  navBtn: {
+    width: 60,
+    height: 50,
+    "border-radius": 25,
+    "background-color": "white",
+  },
+
+  dots: {
+    display: "flex",
+    "flex-flow": 0, // row
+    "justify-content": 3,
+    "align-items": 2,
+    width: width - 140,
+    height: 50,
+  },
+
+  dot: {
+    width: 10,
+    height: 10,
+    "border-radius": 0x7fff,
+  },
+  dotActive: {
+    "background-color": "white",
+    opacity: 255,
+  },
+  dotInactive: {
+    "background-color": "white",
+    opacity: 80,
+  },
+};
+
+Render.render(<App />);
+
