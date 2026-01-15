@@ -1,31 +1,28 @@
 #pragma once
 
 #include <unordered_set>
+#include "native/core/basic/comp.hpp"
 
 extern "C" {
-    #include "lvgl.h"
 };
-
-class BasicComponent;
 
 class GroupManager {
 public:
     static GroupManager& getInstance();
     
-    lv_group_t* getDefaultGroup();
-    
-    void registerContainer(BasicComponent* container);
+    void setInGroupType(BasicComponent* container, int32_t type);
     void unregisterContainer(BasicComponent* container);
-    bool isContainerRegistered(BasicComponent* container);
-    
-    void addToGroup(lv_obj_t* obj);
-    void removeFromGroup(lv_obj_t* obj);
-    void checkAutoEditMode();
+    void addChildToDefGroup(BasicComponent* container);
     
 private:
-    std::unordered_set<BasicComponent*> registered_containers;
+    enum EAddToDefGroupType {
+        ADD_CHILD_TO_DEF_GROUP = 0,
+        ADD_CUR_TO_DEF_GROUP = 1,
+        ADD_TO_DEF_GROUP_TYPE_NONE = 2,
+    };
+
+    std::unordered_set<lv_obj_t*> parent_instances;
     GroupManager() = default;
     GroupManager(const GroupManager&) = delete;
     GroupManager& operator=(const GroupManager&) = delete;
 };
-

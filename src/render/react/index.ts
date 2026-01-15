@@ -74,6 +74,6 @@ export { EAnimateEasingFunc, Animate } from "./core/animate";
 export { Dimensions } from "./core/dimensions";
 export { BUILT_IN_SYMBOL } from "./core/style/symbol";
 export { Theme } from "./core/theme";
-export { DefaultGroup } from "./core/group";
+export { AddChildToDefGroup, AddCurToDefGroup } from "./core/group";
 
 export const Render = Renderer;

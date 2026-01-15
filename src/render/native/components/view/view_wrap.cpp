@@ -17,14 +17,13 @@ WRAPPED_MOVE_TO_BACKGROUND(View, "View")
 WRAPPED_SCROLL_INTO_VIEW(View, "View")
 WRAPPED_JS_CLOSE_COMPONENT(View, "View")
 
-static JSValue NativeCompSetInGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
-    if (argc >= 1 && JS_IsBool(argv[0])) {
+static JSValue NativeCompSetInGroupType(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
+    if (argc >= 1 && JS_IsNumber(argv[0])) {
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ViewClassID);
-        bool value = JS_ToBool(ctx, argv[0]);
-        
-        if (value) {
-            GroupManager::getInstance().registerContainer((BasicComponent*)(ref->comp));
-        }
+        int32_t value;
+        JS_ToInt32(ctx, &value, argv[0]);
+
+        GroupManager::getInstance().setInGroupType((BasicComponent*)(ref->comp), value);
     }
     return JS_UNDEFINED;
 }
@@ -44,7 +43,7 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("moveToBackground", 0, NativeCompMoveToBackground),
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),
     TJS_CFUNC_DEF("close", 0, NativeCompCloseComponent),
-    TJS_CFUNC_DEF("setInGroup", 1, NativeCompSetInGroup),
+    TJS_CFUNC_DEF("setInGroupType", 1, NativeCompSetInGroupType),
 };
 
 static const JSCFunctionListEntry ComponentClassFuncs[] = {

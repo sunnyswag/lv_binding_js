@@ -37,22 +37,18 @@ bool BasicComponent::isEventRegist(int eventType) {
 };
 
 void BasicComponent::insertChildBefore(void *child) {
-    static_cast<BasicComponent*>(child)->parent_instance = this->instance;
-    if (!(static_cast<BasicComponent*>(child)->is_fixed) && (static_cast<BasicComponent*>(child)->type != COMP_TYPE_MASK)) {
-        lv_obj_t* ins = (static_cast<BasicComponent*>(child))->instance;
-        lv_obj_set_parent(ins, this->instance);
-        uint32_t index = lv_obj_get_index(ins);
-        lv_obj_move_to_index(ins, index);
+    BasicComponent* childComp = static_cast<BasicComponent*>(child);
+    childComp->parent_instance = this->instance;
+    if (!childComp->is_fixed && childComp->type != COMP_TYPE_MASK) {
+        lv_obj_set_parent(childComp->instance, this->instance);
+        uint32_t index = lv_obj_get_index(childComp->instance);
+        lv_obj_move_to_index(childComp->instance, index);
+        GroupManager::getInstance().addChildToDefGroup(childComp);
     }
 };
 
 void BasicComponent::removeChild(void* child) {
     BasicComponent* childComp = static_cast<BasicComponent*>(child);
-    
-    if (GroupManager::getInstance().isContainerRegistered(this)) {
-        GroupManager::getInstance().removeFromGroup(childComp->instance);
-    }
-    
     lv_obj_del_async(childComp->instance);
 };
 
@@ -61,11 +57,9 @@ void BasicComponent::appendChild (void* child) {
     childComp->parent_instance = this->instance;
     if (!childComp->is_fixed && childComp->type != COMP_TYPE_MASK) {
         lv_obj_set_parent(childComp->instance, this->instance);
+        GroupManager::getInstance().addChildToDefGroup(childComp);
     }
     
-    if (GroupManager::getInstance().isContainerRegistered(this)) {
-        GroupManager::getInstance().addToGroup(childComp->instance);
-    }
 };
 
 void BasicComponent::initCompStyle (int32_t type) {

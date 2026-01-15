@@ -1,4 +1,4 @@
-import { View, Render, Text, Button, Slider, DefaultGroup, Dimensions } from 'lvgljs-ui';
+import { View, Render, Text, Button, Slider, AddChildToDefGroup, AddCurToDefGroup, Dimensions } from 'lvgljs-ui';
 import React, { useState } from 'react';
 
 const { width, height } = Dimensions.window;
@@ -9,7 +9,14 @@ function App() {
     return (
         <View style={style.window}>
             <View style={style.header}>
-                <Text style={style.headerText}>Header (not in group)</Text>
+                <View 
+                    style={style.header}
+                    groupType={AddCurToDefGroup}
+                    onFocusedStyle={style.buttonFocused} 
+                    onClick={() => setShowSlider(!showSlider)}
+                >
+                    <Text style={style.headerText}>Header (not in group)</Text>
+                </View>
                 <Button 
                     style={style.toggleBtn}
                     onClick={() => setShowSlider(!showSlider)}
@@ -18,8 +25,13 @@ function App() {
                 </Button>
             </View>
 
-            <View group={DefaultGroup} style={style.content}>
-                <Text style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
+
+            <View style={style.content}>
+                <View groupType={AddCurToDefGroup} onFocusedStyle={style.buttonFocused}> 
+                    <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
+                </View>
+                <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
+                <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
                 
                 <Button 
                     style={style.button}
@@ -55,7 +67,8 @@ const style = {
         'flex-direction': 'column',
     },
     header: {
-        height: 80,
+        width: 'auto',
+        height: 'auto',
         'background-color': '#f0f0f0',
         display: 'flex',
         'align-items': 'center',
@@ -71,7 +84,8 @@ const style = {
         'background-color': '#2196f3',
     },
     content: {
-        flex: 1,
+        width: 'auto',
+        height: 'auto',
         padding: 20,
         display: 'flex',
         'flex-direction': 'column',
