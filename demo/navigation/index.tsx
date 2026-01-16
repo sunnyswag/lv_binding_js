@@ -57,7 +57,7 @@ function Page1List({ onBack }: { onBack: () => void }) {
           {items.map((n) => (
             <View
               key={n}
-              {...({ ref: n === 1 ? (ins: any) => (firstItemRef.current = ins) : undefined } as any)}
+              ref={n === 1 ? firstItemRef : undefined}
               onFocusedStyle={style.focused}
               style={style.listRow}
               onClick={() => {
