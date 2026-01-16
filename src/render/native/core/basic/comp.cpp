@@ -62,6 +62,16 @@ void BasicComponent::appendChild (void* child) {
     
 };
 
+void BasicComponent::focus () {
+    if (!this->instance) return;
+    lv_group_t* def_group = lv_group_get_default();
+    if (def_group) {
+        lv_group_focus_obj(this->instance);
+    } else {
+        lv_obj_add_state(this->instance, LV_STATE_FOCUSED);
+    }
+}
+
 void BasicComponent::initCompStyle (int32_t type) {
 
 };
