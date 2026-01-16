@@ -5,9 +5,12 @@ import {
   Button,
   Checkbox,
   Dimensions,
+  I18nProvider,
   Render,
   Slider,
   Text,
+  useI18n,
+  useT,
   View,
 } from "lvgljs-ui";
 import { useAutoFocus } from "./useAutoFocus";
@@ -15,6 +18,12 @@ import { useAutoFocus } from "./useAutoFocus";
 const { width, height } = Dimensions.window;
 
 type Page = "home" | "p1" | "p2" | "p3" | "p4";
+
+declare const require: any;
+const messages = {
+  en: require("./i18n/en.json"),
+  zh: require("./i18n/zh.json"),
+};
 
 function Header({
   title,
@@ -25,6 +34,7 @@ function Header({
   onBack: () => void;
   autoFocusBack?: boolean;
 }) {
+  const t = useT();
   const backRef = useRef<any>(null);
   useAutoFocus(backRef, [autoFocusBack]);
 
@@ -36,7 +46,7 @@ function Header({
         onFocusedStyle={style.focused}
         onClick={onBack}
       >
-        <Text style={style.backText}>{"<"}</Text>
+        <Text style={style.backText}>{t("header.back")}</Text>
       </Button>
       <Text style={style.headerTitle}>{title}</Text>
     </View>
@@ -44,13 +54,14 @@ function Header({
 }
 
 function Page1List({ onBack }: { onBack: () => void }) {
+  const t = useT();
   const items = useMemo(() => Array.from({ length: 40 }).map((_, i) => i + 1), []);
   const firstItemRef = useRef<any>(null);
   useAutoFocus(firstItemRef, []);
 
   return (
     <View style={style.pageRoot}>
-      <Header title="Page 1 - Vertical Scrollable List" onBack={onBack} autoFocusBack={false} />
+      <Header title={t("p1.title")} onBack={onBack} autoFocusBack={false} />
 
       <View style={style.content}>
         <View style={style.scrollBox} groupType={AddChildToDefGroup}>
@@ -64,7 +75,7 @@ function Page1List({ onBack }: { onBack: () => void }) {
                 // no-op (demo)
               }}
             >
-              <Text style={style.rowText}>{`Item ${n}`}</Text>
+              <Text style={style.rowText}>{t("p1.item", { n })}</Text>
             </View>
           ))}
         </View>
@@ -74,13 +85,14 @@ function Page1List({ onBack }: { onBack: () => void }) {
 }
 
 function Page2Info({ onBack }: { onBack: () => void }) {
+  const t = useT();
   const infos = useMemo(
     () => [
-      { title: "Info A", body: "This is the first section of info (for demo switching)." },
-      { title: "Info B", body: "This is the second section. Use Left/Right to switch." },
-      { title: "Info C", body: "This is the third section. Dots indicate the current page." },
-      { title: "Info D", body: "This is the fourth section. A simple info page example." },
-      { title: "Info E", body: "This is the fifth section. Switching loops around." },
+      { titleKey: "p2.a.title", bodyKey: "p2.a.body" },
+      { titleKey: "p2.b.title", bodyKey: "p2.b.body" },
+      { titleKey: "p2.c.title", bodyKey: "p2.c.body" },
+      { titleKey: "p2.d.title", bodyKey: "p2.d.body" },
+      { titleKey: "p2.e.title", bodyKey: "p2.e.body" },
     ],
     [],
   );
@@ -92,12 +104,12 @@ function Page2Info({ onBack }: { onBack: () => void }) {
   const next = () => setIdx((i) => (i + 1) % infos.length);
   return (
     <View style={style.pageRoot}>
-      <Header title="Page 2 - Info Display/Switch" onBack={onBack} autoFocusBack />
+      <Header title={t("p2.title")} onBack={onBack} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.infoCard}>
-          <Text style={style.infoTitle}>{cur.title}</Text>
-          <Text style={style.infoBody}>{cur.body}</Text>
+          <Text style={style.infoTitle}>{t(cur.titleKey)}</Text>
+          <Text style={style.infoBody}>{t(cur.bodyKey)}</Text>
         </View>
 
         <View style={style.infoControls}>
@@ -106,7 +118,7 @@ function Page2Info({ onBack }: { onBack: () => void }) {
             onFocusedStyle={style.focused}
             onClick={prev}
           >
-            <Text style={style.navBtnText}>{"<"}</Text>
+            <Text style={style.navBtnText}>{t("p2.prev")}</Text>
           </Button>
 
           <Button
@@ -114,7 +126,7 @@ function Page2Info({ onBack }: { onBack: () => void }) {
             onFocusedStyle={style.focused}
             onClick={next}
           >
-            <Text style={style.navBtnText}>{">"}</Text>
+            <Text style={style.navBtnText}>{t("p2.next")}</Text>
           </Button>
         </View>
 
@@ -132,16 +144,17 @@ function Page2Info({ onBack }: { onBack: () => void }) {
 }
 
 function Page3Controls({ onBack }: { onBack: () => void }) {
+  const t = useT();
   const [slider, setSlider] = useState(30);
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
   return (
     <View style={style.pageRoot}>
-      <Header title="Page 3 - Control List" onBack={onBack} autoFocusBack />
+      <Header title={t("p3.title")} onBack={onBack} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.scrollBox} groupType={AddChildToDefGroup}>
-          <Text style={style.sectionTitle}>Slider</Text>
+          <Text style={style.sectionTitle}>{t("p3.slider")}</Text>
           <Slider
             style={style.slider}
             indicatorStyle={style.sliderIndicator}
@@ -152,25 +165,27 @@ function Page3Controls({ onBack }: { onBack: () => void }) {
             value={slider}
             onChange={(e) => setSlider(e.value)}
           />
-          <Text style={style.rowText}>{`Current Value: ${Math.round(slider)}%`}</Text>
+          <Text style={style.rowText}>
+            {t("p3.currentValue", { value: Math.round(slider) })}
+          </Text>
 
           <View style={style.divider} />
 
-          <Text style={style.sectionTitle}>Checkbox</Text>
+          <Text style={style.sectionTitle}>{t("p3.checkbox")}</Text>
           <Checkbox
             checked={checked1}
-            text="Option 1"
+            text={t("p3.option1")}
             onChange={(e) => setChecked1(!!e.checked)}
           />
           <Checkbox
             checked={checked2}
-            text="Option 2"
+            text={t("p3.option2")}
             onChange={(e) => setChecked2(!!e.checked)}
           />
 
           <View style={style.divider} />
 
-          <Text style={style.sectionTitle}>Button + Text</Text>
+          <Text style={style.sectionTitle}>{t("p3.buttonText")}</Text>
           <Button
             style={style.actionBtn}
             onFocusedStyle={style.focused}
@@ -180,12 +195,10 @@ function Page3Controls({ onBack }: { onBack: () => void }) {
               setChecked2(true);
             }}
           >
-            <Text style={style.actionBtnText}>Reset to Default</Text>
+            <Text style={style.actionBtnText}>{t("p3.reset")}</Text>
           </Button>
 
-          <Text style={style.hintText}>
-            {`Hint: This page's controls are vertically arranged, and the container is scrollable.\nAll operable controls are marked with groupType.`}
-          </Text>
+          <Text style={style.hintText}>{t("p3.hint")}</Text>
         </View>
       </View>
     </View>
@@ -193,6 +206,7 @@ function Page3Controls({ onBack }: { onBack: () => void }) {
 }
 
 function Page4Countdown({ onBack }: { onBack: () => void }) {
+  const t = useT();
   const total = 60;
   const [remain, setRemain] = useState(total);
 
@@ -208,7 +222,7 @@ function Page4Countdown({ onBack }: { onBack: () => void }) {
   const angle = Math.floor((elapsed / total) * 360);
   return (
     <View style={style.pageRoot}>
-      <Header title="Page 4 - 60s Countdown Progress Circle (Circular Progress Bar)" onBack={onBack} autoFocusBack />
+      <Header title={t("p4.title")} onBack={onBack} autoFocusBack />
 
       <View style={style.centerContent}>
         <Arc
@@ -228,28 +242,58 @@ function Page4Countdown({ onBack }: { onBack: () => void }) {
             // keep non-interactive for this demo
           }}
         />
-        <Text style={style.bigText}>{`time${remain}s`}</Text>
+        <Text style={style.bigText}>{t("p4.time", { remain })}</Text>
         <Button
           style={style.actionBtn}
           onFocusedStyle={style.focused}
           onClick={() => setRemain(total)}
         >
-          <Text style={style.actionBtnText}>Restart</Text>
+          <Text style={style.actionBtnText}>{t("p4.restart")}</Text>
         </Button>
       </View>
     </View>
   );
 }
 
+function LangSwitcher() {
+  const t = useT();
+  const { locale, setLocale } = useI18n();
+  return (
+    <View style={style.langBar}>
+      <Text style={style.langLabel}>{t("nav.lang")}</Text>
+      <Button
+        style={[style.langBtn, locale === "zh" ? style.langBtnActive : style.langBtnInactive]}
+        onFocusedStyle={style.focused}
+        onClick={() => setLocale("zh")}
+      >
+        <Text style={[style.langBtnText, locale === "zh" ? style.langBtnTextActive : style.langBtnTextInactive]}>
+          中文
+        </Text>
+      </Button>
+      <Button
+        style={[style.langBtn, locale === "en" ? style.langBtnActive : style.langBtnInactive]}
+        onFocusedStyle={style.focused}
+        onClick={() => setLocale("en")}
+      >
+        <Text style={[style.langBtnText, locale === "en" ? style.langBtnTextActive : style.langBtnTextInactive]}>
+          EN
+        </Text>
+      </Button>
+    </View>
+  );
+}
+
 function Home({ go }: { go: (p: Page) => void }) {
+  const t = useT();
   const btnW = Math.floor((width - 24 * 2 - 12) / 2);
   const btnH = 72;
 
   return (
     <View style={style.pageRoot}>
       <View style={style.homeHeader}>
-        <Text style={style.homeTitle}>Navigation Demo (5 Pages)</Text>
-        <Text style={style.homeSubTitle}>Four-grid to enter sub-pages, top-left return</Text>
+        <Text style={style.homeTitle}>{t("nav.title")}</Text>
+        <Text style={style.homeSubTitle}>{t("nav.subTitle")}</Text>
+        <LangSwitcher />
       </View>
 
       <View style={style.homeGrid}>
@@ -258,28 +302,28 @@ function Home({ go }: { go: (p: Page) => void }) {
           onFocusedStyle={style.focused}
           onClick={() => go("p1")}
         >
-          <Text style={style.homeBtnText}>Page 1</Text>
+          <Text style={style.homeBtnText}>{t("nav.page1")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
           onClick={() => go("p2")}
         >
-          <Text style={style.homeBtnText}>Page 2</Text>
+          <Text style={style.homeBtnText}>{t("nav.page2")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
           onClick={() => go("p3")}
         >
-          <Text style={style.homeBtnText}>Page 3</Text>
+          <Text style={style.homeBtnText}>{t("nav.page3")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
           onClick={() => go("p4")}
         >
-          <Text style={style.homeBtnText}>Page 4</Text>
+          <Text style={style.homeBtnText}>{t("nav.page4")}</Text>
         </Button>
       </View>
     </View>
@@ -295,6 +339,14 @@ function App() {
   if (page === "p3") return <Page3Controls onBack={backToHome} />;
   if (page === "p4") return <Page4Countdown onBack={backToHome} />;
   return <Home go={setPage} />;
+}
+
+function Root() {
+  return (
+    <I18nProvider messages={messages as any} defaultLocale="en" fallbackLocale="en">
+      <App />
+    </I18nProvider>
+  );
 }
 
 const style: Record<string, any> = {
@@ -484,6 +536,30 @@ const style: Record<string, any> = {
   },
   homeTitle: { "text-color": "white", "font-size": 20 },
   homeSubTitle: { "text-color": "0xb0b0b0", "font-size": 12, "padding-top": 6 },
+  langBar: {
+    width: "100%",
+    height: 32,
+    display: "flex",
+    "flex-direction": "row",
+    "align-items": "center",
+    "justify-content": "flex-start",
+    margin: "10px 0 0 0",
+  },
+  langLabel: { "text-color": "0xb0b0b0", "font-size": 12, padding: "0 8px 0 0" },
+  langBtn: {
+    width: 56,
+    height: 26,
+    "border-radius": 10,
+    margin: "0 8px 0 0",
+    display: "flex",
+    "align-items": "center",
+    "justify-content": "center",
+  },
+  langBtnActive: { "background-color": "white" },
+  langBtnInactive: { "background-color": "0x1d1d1d" },
+  langBtnText: { "font-size": 12 },
+  langBtnTextActive: { "text-color": "black" },
+  langBtnTextInactive: { "text-color": "white" },
   homeGrid: {
     width,
     height: height - 100,
@@ -505,6 +581,6 @@ const style: Record<string, any> = {
   homeBtnText: { "text-color": "white", "font-size": 16 },
 };
 
-Render.render(<App />);
+Render.render(<Root />);
 
 

@@ -42,6 +42,8 @@ import { ViewComp, ViewProps } from "./components/View/comp";
 import ViewConfig from "./components/View/config";
 import { Renderer } from "./core/renderer";
 import { registerWithRef } from "./ref";
+export { I18nProvider, useI18n, useT } from "./i18n";
+export type { I18nAllMessages, I18nLocale, I18nMessages, I18nVars, TranslateFn } from "./i18n";
 
 export const View = registerWithRef<ViewProps, ViewComp>(new ViewConfig());
 // export const Window = registerComponent<WindowProps, Window>(new WindowConfig());
