@@ -11,7 +11,23 @@ export const getUid = () => {
 const instanceMap = new Map();
 
 export const getInstance = (uid) => {
-  return instanceMap[uid];
+  return instanceMap.get(uid);
+};
+
+const cleanupInstance = (child, { destroy } = { destroy: false }) => {
+  if (!child) return;
+  const uid = child.uid;
+  if (uid) {
+    unRegistEvent(uid);
+    instanceMap.delete(uid);
+  }
+  // IMPORTANT:
+  // For nested children, the native `parent.removeChild(child)` implementation may already
+  // delete/detach the underlying LVGL object. Calling `child.close()` again can double-free/hang.
+  // Only destroy on root-container removal where we own the lifetime explicitly.
+  if (destroy && child.close) {
+    child.close();
+  }
 };
 
 const HostConfig = {
@@ -32,10 +48,15 @@ const HostConfig = {
     return {};
   },
   shouldSetTextContent: function (type, props) {
+    // Keep text as a prop for our `Text` host component, not as separate text children.
+    if (type === "Text") {
+      const c = props?.children;
+      if (typeof c === "string" || typeof c === "number") return true;
+      if (Array.isArray(c)) {
+        return c.every((x) => typeof x === "string" || typeof x === "number");
+      }
+    }
     return false;
-    return (
-      typeof props.children === "string" || typeof props.children === "number"
-    );
   },
   createInstance: (
     type,
@@ -53,7 +74,7 @@ const HostConfig = {
       workInProgress,
       uid,
     );
-    instanceMap[uid] = instance;
+    instanceMap.set(uid, instance);
     return instance;
   },
   createTextInstance: (
@@ -62,19 +83,17 @@ const HostConfig = {
     context,
     workInProgress,
   ) => {
-    return null;
-    // const { createInstance } = getComponentByTagName('Text');
-    // const uid = getUid()
-
-    // return createInstance(
-    //   {
-    //     text
-    //   },
-    //   rootContainerInstance,
-    //   context,
-    //   workInProgress,
-    //   uid
-    // );
+    const { createInstance } = getComponentByTagName("Text");
+    const uid = getUid();
+    const instance = createInstance(
+      { children: text },
+      rootContainerInstance,
+      context,
+      workInProgress,
+      uid,
+    );
+    instanceMap.set(uid, instance);
+    return instance;
   },
   appendInitialChild: (parent, child) => {
     parent.appendChild(child);
@@ -93,13 +112,11 @@ const HostConfig = {
     container.add(child);
   },
   insertInContainerBefore: (container, child, beforeChild) => {
-    container.add(child);
+    container.insertBefore(child, beforeChild);
   },
   removeChildFromContainer: (container, child) => {
     container.delete(child);
-    if (child.close) {
-      child.close();
-    }
+    cleanupInstance(child, { destroy: true });
   },
   prepareUpdate(instance, oldProps, newProps) {
     return true;
@@ -126,8 +143,7 @@ const HostConfig = {
   },
   removeChild(parent, child) {
     parent?.removeChild(child);
-    unRegistEvent(child.uid);
-    delete instanceMap[child.uid];
+    cleanupInstance(child, { destroy: false });
   },
   commitMount: function (instance, type, newProps, internalInstanceHandle) {
     const { commitMount } = getComponentByTagName(type);
