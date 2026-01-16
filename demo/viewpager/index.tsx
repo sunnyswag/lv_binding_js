@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Dimensions, Render, Text, View } from "lvgljs-ui";
+import { AddChildToDefGroup, Button, Dimensions, Render, Text, View } from "lvgljs-ui";
 
 const { width, height } = Dimensions.window;
 
@@ -16,6 +16,7 @@ function App() {
   const pageRefs = useRef<any[]>([]);
 
   const [active, setActive] = useState(0);
+  const [debug, setDebug] = useState("");
 
   const pageColors = useMemo(
     () => ["red", "blue", "green", "orange"],
@@ -23,15 +24,19 @@ function App() {
   );
 
   const scrollTo = (idx: number) => {
-    const n = Math.max(0, Math.min(pageCount - 1, idx));
-    setActive(n);
+    if (idx < 0 || idx >= pageCount) return;
+    setActive(idx);
     // 让对应 page 滚动进可视区域（LVGL 内部会按 snap 对齐）
-    pageRefs.current[n]?.scrollIntoView?.();
+    const target = pageRefs.current[idx];
+    const left = target?.style?.left;
+    target?.scrollIntoView?.();
+    const lefts = pageRefs.current.map((p) => p?.style?.left);
+    setDebug(JSON.stringify({ idx, hasRef: !!target, left, lefts }));
   };
 
   useEffect(() => {
     // 初始定位到第 0 页
-    scrollTo(2);
+    scrollTo(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -43,6 +48,7 @@ function App() {
       >
         {Array.from({ length: pageCount }).map((_, i) => (
           <View
+            onFocusedStyle={style.pageFocused}
             key={i}
             ref={(ins) => (pageRefs.current[i] = ins)}
             style={[
@@ -85,6 +91,10 @@ function App() {
           <Text>{">"}</Text>
         </Button>
       </View>
+
+      <View style={style.debugBar}>
+        <Text style={style.debugText}>{debug}</Text>
+      </View>
     </View>
   );
 }
@@ -115,7 +125,7 @@ const style: Record<string, any> = {
     "overflow-scrolling": 1,
 
     // 开启 X 方向 snap（枚举值见 LV_SCROLL_SNAP_*）
-    "scroll-snap-x": 2, // 通常 2=LV_SCROLL_SNAP_CENTER（不同版本可能略有差异；看效果不对再调）
+    "scroll-snap-x": 3, // LV_SCROLL_SNAP_CENTER（本仓库 lvgl: NONE=0 START=1 END=2 CENTER=3）
   },
 
   // 每一页：固定为一屏大小，并允许被 snap
@@ -171,8 +181,20 @@ const style: Record<string, any> = {
     opacity: 255,
   },
   dotInactive: {
-    "background-color": "white",
+    "background-color": "grey",
     opacity: 80,
+  },
+  pageFocused: {
+    "background-color": "white",
+    opacity: 255,
+  },
+  debugBar: {
+    width,
+    height: 40,
+    "background-color": "black",
+  },
+  debugText: {
+    "text-color": "white",
   },
 };
 

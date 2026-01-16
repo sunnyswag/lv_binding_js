@@ -56,6 +56,11 @@ export type CommonProps = {
     currentTarget: any,
     stopPropogation: () => void,
   }) => void;
+  onCancel?: (event: {
+    target: any,
+    currentTarget: any,
+    stopPropogation: () => void,
+  }) => void;
   onFocusedStyle?: StyleProps;
 };
 
@@ -64,6 +69,7 @@ export type OnChangeEvent = {
   currentTarget: any,
   stopPropogation: () => void,
   value: number,
+  checked?: boolean,
 }
 
 export type OnClickEvent = {
@@ -162,6 +168,9 @@ export const CommonComponentApi = function ({
     },
     onReleased(fn) {
       handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_RELEASED);
+    },
+    onCancel(fn) {
+      handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_CANCEL);
     },
     onFocusedStyle(styleSheet) {
       setStyle({
