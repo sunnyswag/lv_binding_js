@@ -20,9 +20,9 @@ const { width, height } = Dimensions.window;
 type Page = "home" | "p1" | "p2" | "p3" | "p4";
 
 declare const require: any;
-const messages = {
-  en: require("./i18n/en.json"),
-  zh: require("./i18n/zh.json"),
+const messages = (locale: string) => {
+  if (locale === "zh") return require("./i18n/zh.json");
+  return require("./i18n/en.json");
 };
 
 function Header({
@@ -343,7 +343,7 @@ function App() {
 
 function Root() {
   return (
-    <I18nProvider messages={messages as any} defaultLocale="en" fallbackLocale="en">
+    <I18nProvider messages={messages} defaultLocale="en" fallbackLocale="en">
       <App />
     </I18nProvider>
   );

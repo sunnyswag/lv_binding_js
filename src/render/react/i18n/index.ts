@@ -8,6 +8,12 @@ export interface I18nMessages {
 }
 
 export type I18nAllMessages = Record<I18nLocale, I18nMessages>;
+export type I18nMessagesLoader = (locale: I18nLocale) => I18nMessages | undefined;
+export type I18nMessagesSource = I18nAllMessages | I18nMessagesLoader;
+
+function isMessagesLoader(x: I18nMessagesSource): x is I18nMessagesLoader {
+  return typeof x === "function";
+}
 
 function getByPath(messages: I18nMessages | undefined, key: string): string | undefined {
   if (!messages) return;
@@ -49,7 +55,7 @@ export function I18nProvider({
   onMissingKey,
 }: {
   children: React.ReactNode;
-  messages: I18nAllMessages;
+  messages: I18nMessagesSource;
   defaultLocale?: I18nLocale;
   locale?: I18nLocale;
   fallbackLocale?: I18nLocale;
@@ -64,18 +70,43 @@ export function I18nProvider({
     [controlledLocale],
   );
 
+  const loaderCacheRef = React.useRef<Map<I18nLocale, I18nMessages>>(new Map());
+
+  const getMessagesForLocale = React.useCallback(
+    (loc: I18nLocale): I18nMessages | undefined => {
+      if (!isMessagesLoader(messages)) return (messages as I18nAllMessages)?.[loc];
+
+      const cached = loaderCacheRef.current.get(loc);
+      if (cached) return cached;
+      const loaded = messages(loc);
+      if (loaded) loaderCacheRef.current.set(loc, loaded);
+      return loaded;
+    },
+    [messages],
+  );
+
+  React.useEffect(() => {
+    if (!isMessagesLoader(messages)) return;
+
+    const keep = new Set<I18nLocale>([locale]);
+    if (fallbackLocale) keep.add(fallbackLocale);
+    for (const k of loaderCacheRef.current.keys()) {
+      if (!keep.has(k)) loaderCacheRef.current.delete(k);
+    }
+  }, [messages, locale, fallbackLocale]);
+
   const t: TranslateFn = React.useCallback(
     (key: string, vars?: I18nVars) => {
       const msg =
-        getByPath(messages?.[locale], key) ??
-        (fallbackLocale ? getByPath(messages?.[fallbackLocale], key) : undefined);
+        getByPath(getMessagesForLocale(locale), key) ??
+        (fallbackLocale ? getByPath(getMessagesForLocale(fallbackLocale), key) : undefined);
       if (msg === undefined) {
         onMissingKey?.(key, { locale, fallbackLocale });
         return key;
       }
       return format(msg, vars);
     },
-    [messages, locale, fallbackLocale, onMissingKey],
+    [getMessagesForLocale, locale, fallbackLocale, onMissingKey],
   );
 
   const value = React.useMemo<I18nContextValue>(
