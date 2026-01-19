@@ -24,14 +24,13 @@ const messages = (locale: string) => {
 
 function Header({
   title,
-  onBack,
   autoFocusBack,
 }: {
   title: string;
-  onBack: () => void;
   autoFocusBack?: boolean;
 }) {
   const t = useT();
+  const navigate = useNavigate();
 
   return (
     <View style={style.header}>
@@ -39,7 +38,7 @@ function Header({
         autoFocus={autoFocusBack}
         style={style.backBtn}
         onFocusedStyle={style.focused}
-        onClick={onBack}
+        onClick={() => navigate(-1)}
       >
         <Text style={style.backText}>{t("header.back")}</Text>
       </Button>
@@ -50,12 +49,11 @@ function Header({
 
 function Page1List() {
   const t = useT();
-  const navigate = useNavigate();
   const items = useMemo(() => Array.from({ length: 40 }).map((_, i) => i + 1), []);
 
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p1.title")} onBack={() => navigate("/")} autoFocusBack={false} />
+      <Header title={t("p1.title")} autoFocusBack={false} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
@@ -81,7 +79,6 @@ function Page1List() {
 
 function Page2Info() {
   const t = useT();
-  const navigate = useNavigate();
   const infos = useMemo(
     () => [
       { titleKey: "p2.a.title", bodyKey: "p2.a.body" },
@@ -100,7 +97,7 @@ function Page2Info() {
   const next = () => setIdx((i) => (i + 1) % infos.length);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p2.title")} onBack={() => navigate("/")} autoFocusBack />
+      <Header title={t("p2.title")} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.infoCard}>
@@ -141,13 +138,12 @@ function Page2Info() {
 
 function Page3Controls() {
   const t = useT();
-  const navigate = useNavigate();
   const [slider, setSlider] = useState(30);
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p3.title")} onBack={() => navigate("/p1")} autoFocusBack />
+      <Header title={t("p3.title")} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
@@ -204,7 +200,6 @@ function Page3Controls() {
 
 function Page4Countdown() {
   const t = useT();
-  const navigate = useNavigate();
   const total = 60;
   const [remain, setRemain] = useState(total);
 
@@ -220,7 +215,7 @@ function Page4Countdown() {
   const angle = Math.floor((elapsed / total) * 360);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p4.title")} onBack={() => navigate("/")} autoFocusBack />
+      <Header title={t("p4.title")} autoFocusBack />
 
       <View style={style.centerContent}>
         <Arc
