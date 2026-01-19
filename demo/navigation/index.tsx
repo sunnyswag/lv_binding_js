@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MemoryRouter, Route, Routes, useNavigate } from "react-router";
 import {
-  AddChildToDefGroup,
   Arc,
   Button,
   Checkbox,
@@ -14,7 +13,6 @@ import {
   useT,
   View,
 } from "lvgljs-ui";
-import { useAutoFocus } from "./useAutoFocus";
 
 const { width, height } = Dimensions.window;
 
@@ -34,13 +32,11 @@ function Header({
   autoFocusBack?: boolean;
 }) {
   const t = useT();
-  const backRef = useRef<any>(null);
-  useAutoFocus(backRef, [autoFocusBack]);
 
   return (
     <View style={style.header}>
       <Button
-        ref={backRef}
+        autoFocus={autoFocusBack}
         style={style.backBtn}
         onFocusedStyle={style.focused}
         onClick={onBack}
@@ -56,19 +52,18 @@ function Page1List() {
   const t = useT();
   const navigate = useNavigate();
   const items = useMemo(() => Array.from({ length: 40 }).map((_, i) => i + 1), []);
-  const firstItemRef = useRef<any>(null);
-  useAutoFocus(firstItemRef, []);
 
   return (
     <View style={style.pageRoot}>
       <Header title={t("p1.title")} onBack={() => navigate("/")} autoFocusBack={false} />
 
       <View style={style.content}>
-        <View style={style.scrollBox} groupType={AddChildToDefGroup}>
+        <View style={style.scrollBox}>
           {items.map((n) => (
             <View
               key={n}
-              ref={n === 1 ? firstItemRef : undefined}
+              autoFocus={n === 1}
+              addToFocusGroup
               onFocusedStyle={style.focused}
               style={style.listRow}
               onClick={() => {
@@ -155,7 +150,7 @@ function Page3Controls() {
       <Header title={t("p3.title")} onBack={() => navigate("/p1")} autoFocusBack />
 
       <View style={style.content}>
-        <View style={style.scrollBox} groupType={AddChildToDefGroup}>
+        <View style={style.scrollBox}>
           <Text style={style.sectionTitle}>{t("p3.slider")}</Text>
           <Slider
             style={style.slider}
@@ -301,7 +296,7 @@ function Home() {
       </View>
 
       <View style={style.homeGrid}>
-        <Button
+        <Button autoFocus
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
           onClick={() => navigate("/p1")}

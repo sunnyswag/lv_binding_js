@@ -119,7 +119,8 @@ const HostConfig = {
   appendInitialChild: (parent, child) => {
     parent.appendChild(child);
   },
-  finalizeInitialChildren: (yueElement, type, props) => {
+  finalizeInitialChildren: (instance, type, props) => {
+    instance.reorderFocusGroup?.();
     return true;
   },
   prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext) {
@@ -151,6 +152,9 @@ const HostConfig = {
   },
   commitMount: function (instance, type, newProps, internalInstanceHandle) {
     instanceMap.set(instance.uid, instance);
+    if (newProps.autoFocus) {
+      instance.focus?.();
+    }
     const { commitMount } = getComponentByTagName(type);
     return commitMount(instance, newProps, internalInstanceHandle);
   },

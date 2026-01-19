@@ -1,4 +1,4 @@
-import { View, Render, Text, Button, Slider, AddChildToDefGroup, AddCurToDefGroup, Dimensions } from 'lvgljs-ui';
+import { View, Render, Text, Button, Slider, Dimensions } from 'lvgljs-ui';
 import React, { useState } from 'react';
 
 const { width, height } = Dimensions.window;
@@ -11,11 +11,11 @@ function App() {
             <View style={style.header}>
                 <View 
                     style={style.header}
-                    groupType={AddCurToDefGroup}
+                    addToFocusGroup
                     onFocusedStyle={style.buttonFocused} 
                     onClick={() => setShowSlider(!showSlider)}
                 >
-                    <Text style={style.headerText}>Header (not in group)</Text>
+                    <Text style={style.headerText}>Header (in group)</Text>
                 </View>
                 <Button 
                     style={style.toggleBtn}
@@ -27,11 +27,11 @@ function App() {
 
 
             <View style={style.content}>
-                <View groupType={AddCurToDefGroup} onFocusedStyle={style.buttonFocused}> 
-                    <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
+                <View addToFocusGroup onFocusedStyle={style.buttonFocused}> 
+                    <Text style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
                 </View>
-                <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
-                <Text onFocusedStyle={style.buttonFocused} style={style.contentText}>Content (in group, use keyboard to navigate)</Text>
+                <Text style={style.contentText}>Content (not in group)</Text>
+                <Text style={style.contentText}>Content (not in group)</Text>
                 
                 <Button 
                     style={style.button}
@@ -120,4 +120,3 @@ const style = {
 };
 
 Render.render(<App />);
-

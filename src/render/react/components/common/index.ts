@@ -62,6 +62,8 @@ export type CommonProps = {
     stopPropogation: () => void,
   }) => void;
   onFocusedStyle?: StyleProps;
+  addToFocusGroup?: boolean;
+  autoFocus?: boolean;
 };
 
 export type OnChangeEvent = {
@@ -180,6 +182,12 @@ export const CommonComponentApi = function ({
         styleType: STYLE_TYPE.STATE_FOCUSED,
         oldStyleSheet: oldProps.onFocusedStyle,
       });
+    },
+    addToFocusGroup(v) {
+      if (v) comp.addToFocusGroup?.();
+    },
+    autoFocus() {
+      // handled in commitMount
     },
   };
 };

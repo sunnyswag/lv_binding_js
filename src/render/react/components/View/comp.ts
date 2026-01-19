@@ -6,22 +6,15 @@ import {
   setStyle,
   styleGetterProp,
 } from "../config";
-import { AddToDefGroupType, toNativeInGroupType } from "../../core/group";
 
 const bridge = globalThis[Symbol.for('lvgljs')];
 const NativeView = bridge.NativeRender.NativeComponents.View;
 
-export type ViewProps = CommonProps & {
-  groupType?: AddToDefGroupType;
-}
+export type ViewProps = CommonProps
 
 function setViewProps(comp, newProps: ViewProps, oldProps: ViewProps) {
   const setter = {
     ...CommonComponentApi({ compName: "View", comp, newProps, oldProps }),
-    groupType(g) {
-      const v = toNativeInGroupType(g);
-      if (v !== undefined) comp.setInGroupType(v);
-    },
   };
   Object.keys(setter).forEach((key) => {
     if (newProps.hasOwnProperty(key)) {

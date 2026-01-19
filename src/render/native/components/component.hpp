@@ -155,6 +155,26 @@ void NativeComponentMaskInit (JSContext* ctx, JSValue ns);
     };                                                                                                                      \
                                                                                                                             \
 
+#define WRAPPED_ADD_TO_FOCUS_GROUP(COMPONENT,COMPONENT_NAME)                                                                \
+    static JSValue NativeCompAddToFocusGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {         \
+        COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, COMPONENT##ClassID);                                              \
+        if (ref && ref->comp) {                                                                                             \
+            GroupManager::getInstance().addToFocusGroup((BasicComponent*)(ref->comp));                                      \
+        }                                                                                                                   \
+        return JS_UNDEFINED;                                                                                                \
+    };                                                                                                                      \
+                                                                                                                            \
+
+#define WRAPPED_REORDER_FOCUS_GROUP(COMPONENT,COMPONENT_NAME)                                                               \
+    static JSValue NativeCompReorderFocusGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {       \
+        COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, COMPONENT##ClassID);                                              \
+        if (ref && ref->comp) {                                                                                             \
+            GroupManager::getInstance().reorderFocusGroup((BasicComponent*)(ref->comp));                                    \
+        }                                                                                                                   \
+        return JS_UNDEFINED;                                                                                                \
+    };                                                                                                                      \
+                                                                                                                            \
+
 #define WRAPPED_JS_SETSTYLE(COMPONENT,COMPONENT_NAME)                                                                       \
     static JSValue NativeCompSetStyle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv) {                \
         if (argc >= 2 && JS_IsObject(argv[0]) && JS_IsArray(argv[1]) && JS_IsNumber(argv[2]) && JS_IsNumber(argv[3]) && JS_IsBool(argv[4])) {       \

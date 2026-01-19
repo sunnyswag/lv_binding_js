@@ -10,6 +10,7 @@ STYLE_INFO(Roller, "Roller")
 WRAPPED_MOVE_TO_FRONT(Roller, "Roller")
 WRAPPED_MOVE_TO_BACKGROUND(Roller, "Roller")
 WRAPPED_SCROLL_INTO_VIEW(Roller, "Roller")
+WRAPPED_FOCUS(Roller, "Roller")
 WRAPPED_JS_CLOSE_COMPONENT(Roller, "Roller")
 
 static JSValue NativeCompSetOptions(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
@@ -80,6 +81,7 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("moveToFront", 0, NativeCompMoveToFront),
     TJS_CFUNC_DEF("moveToBackground", 0, NativeCompMoveToBackground),
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),
+    TJS_CFUNC_DEF("focus", 0, NativeCompFocus),
     TJS_CFUNC_DEF("close", 0, NativeCompCloseComponent),
 };
 

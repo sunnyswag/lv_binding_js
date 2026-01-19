@@ -10,6 +10,11 @@ GroupManager& GroupManager::getInstance() {
     return instance;
 }
 
+void GroupManager::addToFocusGroup(BasicComponent* container) {
+    if (!container || !container->instance) return;
+    lv_group_add_obj(lv_group_get_default(), container->instance);
+}
+
 static void getDesiredOrder(lv_obj_t* parent, std::vector<lv_obj_t*>& desired, lv_group_t* def_group) {
     // Desired order: parent's children order, but only those currently in default group.
     if (!parent) return;
@@ -52,12 +57,14 @@ static void startReorder(lv_group_t* def_group, std::vector<lv_obj_t*>& desired,
     }
 }
 
-static void reorderDefaultGroupChildrenForParent(lv_obj_t* parent) {
+void GroupManager::reorderFocusGroup(BasicComponent* parent) {
+    if (!parent || !parent->instance) return;
+    
     lv_group_t* def_group = lv_group_get_default();
     if (!def_group) return;
     
     std::vector<lv_obj_t*> desired;
-    getDesiredOrder(parent, desired, def_group);
+    getDesiredOrder(parent->instance, desired, def_group);
     if (desired.size() < 2) return;
 
     std::unordered_map<lv_obj_t*, void*> node_of;
@@ -65,36 +72,4 @@ static void reorderDefaultGroupChildrenForParent(lv_obj_t* parent) {
     if (matched_size == desired.size()) return;
 
     startReorder(def_group, desired, node_of);
-}
-
-static void addToGroupInternal(BasicComponent* container) {
-    if (!container || !container->instance) return;
-    lv_group_add_obj(lv_group_get_default(), container->instance);
-}
-
-void GroupManager::setInGroupType(BasicComponent* container, int32_t type) {
-    if (!container) return;
-
-    switch (type) {
-        case ADD_CUR_TO_DEF_GROUP:
-            addToGroupInternal(container);
-            break;
-        case ADD_CHILD_TO_DEF_GROUP:
-            parent_instances.insert(container->instance);
-            break;
-        default:
-            break;
-    }
-}
-
-void GroupManager::unregisterContainer(BasicComponent* container) {
-    parent_instances.erase(container->instance);
-}
-
-void GroupManager::addChildToDefGroup(BasicComponent* container) {
-    if (parent_instances.find(container->parent_instance) == parent_instances.end()) return;
-    addToGroupInternal(container);
-    // Fix ordering: some widgets are auto-added to default group at creation time (before re-parenting),
-    // so when we attach children we re-order the group's focus list to match the parent's child order.
-    reorderDefaultGroupChildrenForParent(container->parent_instance);
 }

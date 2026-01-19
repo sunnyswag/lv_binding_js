@@ -16,18 +16,9 @@ WRAPPED_MOVE_TO_FRONT(View, "View")
 WRAPPED_MOVE_TO_BACKGROUND(View, "View")
 WRAPPED_SCROLL_INTO_VIEW(View, "View")
 WRAPPED_FOCUS(View, "View")
+WRAPPED_ADD_TO_FOCUS_GROUP(View, "View")
+WRAPPED_REORDER_FOCUS_GROUP(View, "View")
 WRAPPED_JS_CLOSE_COMPONENT(View, "View")
-
-static JSValue NativeCompSetInGroupType(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
-    if (argc >= 1 && JS_IsNumber(argv[0])) {
-        COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ViewClassID);
-        int32_t value;
-        JS_ToInt32(ctx, &value, argv[0]);
-
-        GroupManager::getInstance().setInGroupType((BasicComponent*)(ref->comp), value);
-    }
-    return JS_UNDEFINED;
-}
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
@@ -45,7 +36,8 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),
     TJS_CFUNC_DEF("focus", 0, NativeCompFocus),
     TJS_CFUNC_DEF("close", 0, NativeCompCloseComponent),
-    TJS_CFUNC_DEF("setInGroupType", 1, NativeCompSetInGroupType),
+    TJS_CFUNC_DEF("addToFocusGroup", 0, NativeCompAddToFocusGroup),
+    TJS_CFUNC_DEF("reorderFocusGroup", 0, NativeCompReorderFocusGroup),
 };
 
 static const JSCFunctionListEntry ComponentClassFuncs[] = {

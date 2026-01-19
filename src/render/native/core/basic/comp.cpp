@@ -1,7 +1,6 @@
 #include "./comp.hpp"
 
 #include "native/core/utils/utils.hpp"
-#include "native/core/group/group_manager.hpp"
 
 std::unordered_map<std::string, BasicComponent*> comp_map;
 
@@ -43,7 +42,6 @@ void BasicComponent::insertChildBefore(void *child) {
         lv_obj_set_parent(childComp->instance, this->instance);
         uint32_t index = lv_obj_get_index(childComp->instance);
         lv_obj_move_to_index(childComp->instance, index);
-        GroupManager::getInstance().addChildToDefGroup(childComp);
     }
 };
 
@@ -54,9 +52,7 @@ void BasicComponent::appendChild (void* child) {
     childComp->parent_instance = this->instance;
     if (!childComp->is_fixed && childComp->type != COMP_TYPE_MASK) {
         lv_obj_set_parent(childComp->instance, this->instance);
-        GroupManager::getInstance().addChildToDefGroup(childComp);
     }
-    
 };
 
 void BasicComponent::focus () {
@@ -247,7 +243,6 @@ void BasicComponent::setBackgroundImage (uint8_t* buf, size_t buf_len, int32_t s
 };
 
 BasicComponent::~BasicComponent () {
-    GroupManager::getInstance().unregisterContainer(this);
     comp_map.erase(this->uid);
 
     const lv_coord_t* ptr1 = this->grid_row_desc;
