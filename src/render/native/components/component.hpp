@@ -159,21 +159,13 @@ void NativeComponentMaskInit (JSContext* ctx, JSValue ns);
     static JSValue NativeCompAddToFocusGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {         \
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, COMPONENT##ClassID);                                              \
         if (ref && ref->comp) {                                                                                             \
-            GroupManager::getInstance().addToFocusGroup((BasicComponent*)(ref->comp));                                      \
+            BasicComponent* comp = (BasicComponent*)(ref->comp);                                                            \
+            if (comp->instance) {                                                                                           \
+                lv_group_add_obj(lv_group_get_default(), comp->instance);                                                    \
+            }                                                                                                               \
         }                                                                                                                   \
         return JS_UNDEFINED;                                                                                                \
-    };                                                                                                                      \
-                                                                                                                            \
-
-#define WRAPPED_REORDER_FOCUS_GROUP(COMPONENT,COMPONENT_NAME)                                                               \
-    static JSValue NativeCompReorderFocusGroup(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {       \
-        COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, COMPONENT##ClassID);                                              \
-        if (ref && ref->comp) {                                                                                             \
-            GroupManager::getInstance().reorderFocusGroup((BasicComponent*)(ref->comp));                                    \
-        }                                                                                                                   \
-        return JS_UNDEFINED;                                                                                                \
-    };                                                                                                                      \
-                                                                                                                            \
+    }
 
 #define WRAPPED_JS_SETSTYLE(COMPONENT,COMPONENT_NAME)                                                                       \
     static JSValue NativeCompSetStyle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv) {                \

@@ -120,7 +120,6 @@ const HostConfig = {
     parent.appendChild(child);
   },
   finalizeInitialChildren: (instance, type, props) => {
-    instance.reorderFocusGroup?.();
     return true;
   },
   prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext) {

@@ -1,5 +1,4 @@
 #include "view.hpp"
-#include "native/core/group/group_manager.hpp"
 
 static JSClassID ViewClassID;
 
@@ -17,7 +16,6 @@ WRAPPED_MOVE_TO_BACKGROUND(View, "View")
 WRAPPED_SCROLL_INTO_VIEW(View, "View")
 WRAPPED_FOCUS(View, "View")
 WRAPPED_ADD_TO_FOCUS_GROUP(View, "View")
-WRAPPED_REORDER_FOCUS_GROUP(View, "View")
 WRAPPED_JS_CLOSE_COMPONENT(View, "View")
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
@@ -37,7 +35,6 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("focus", 0, NativeCompFocus),
     TJS_CFUNC_DEF("close", 0, NativeCompCloseComponent),
     TJS_CFUNC_DEF("addToFocusGroup", 0, NativeCompAddToFocusGroup),
-    TJS_CFUNC_DEF("reorderFocusGroup", 0, NativeCompReorderFocusGroup),
 };
 
 static const JSCFunctionListEntry ComponentClassFuncs[] = {

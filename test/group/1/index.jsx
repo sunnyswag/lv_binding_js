@@ -18,6 +18,7 @@ function App() {
                     <Text style={style.headerText}>Header (in group)</Text>
                 </View>
                 <Button 
+                    autoFocus
                     style={style.toggleBtn}
                     onClick={() => setShowSlider(!showSlider)}
                 >
