@@ -135,9 +135,8 @@ static JSValue RollerConstructor(JSContext *ctx, JSValueConst new_target, int ar
 
 static void RollerFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, RollerClassID);
-    LV_LOG_USER("Roller %s release", th->uid);
     if (th) {
-        delete static_cast<Roller*>(th->comp);
+        LV_LOG_USER("Roller %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

@@ -156,9 +156,8 @@ static JSValue ArcConstructor(JSContext *ctx, JSValueConst new_target, int argc,
 
 static void ArcFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, ArcClassID);
-    LV_LOG_USER("Arc %s release", th->uid);
     if (th) {
-        delete static_cast<Arc*>(th->comp);
+        LV_LOG_USER("Arc %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

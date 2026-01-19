@@ -47,10 +47,7 @@ void BasicComponent::insertChildBefore(void *child) {
     }
 };
 
-void BasicComponent::removeChild(void* child) {
-    BasicComponent* childComp = static_cast<BasicComponent*>(child);
-    lv_obj_del_async(childComp->instance);
-};
+void BasicComponent::removeChild(void* child) {};
 
 void BasicComponent::appendChild (void* child) {
     BasicComponent* childComp = static_cast<BasicComponent*>(child);
@@ -272,8 +269,18 @@ BasicComponent::~BasicComponent () {
     if (ptr2) {
         free((lv_coord_t*)(ptr2));
     }
-    // do not del here, remove child will do the action
-    // lv_obj_del(this->instance);
+
+    for(auto& trans : this->trans_props_map)
+        if (trans.second != nullptr)
+            free(trans.second);
+
+    for(auto &style : style_map) {
+        lv_style_reset(style.second);
+        style_pool.deallocate(style.second);
+    }
+
+    lv_obj_remove_event_cb(instance, &BasicComponent::EventCallback);
+    lv_obj_del(this->instance);
 };
 
 void BasicComponent::setAlign (int32_t align_type, int32_t x, int32_t y) {

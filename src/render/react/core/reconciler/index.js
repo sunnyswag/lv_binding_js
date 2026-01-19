@@ -1,6 +1,7 @@
 import { getComponentByTagName } from "../../components/config";
 import { unRegistEvent } from "../event";
 import Reconciler from "react-reconciler";
+import { DefaultEventPriority } from "react-reconciler/constants";
 
 let id = 1;
 
@@ -14,24 +15,21 @@ export const getInstance = (uid) => {
   return instanceMap.get(uid);
 };
 
-const cleanupInstance = (child, { destroy } = { destroy: false }) => {
+const cleanupInstance = (child) => {
   if (!child) return;
   const uid = child.uid;
   if (uid) {
     unRegistEvent(uid);
     instanceMap.delete(uid);
   }
-  // IMPORTANT:
-  // For nested children, the native `parent.removeChild(child)` implementation may already
-  // delete/detach the underlying LVGL object. Calling `child.close()` again can double-free/hang.
-  // Only destroy on root-container removal where we own the lifetime explicitly.
-  if (destroy && child.close) {
-    child.close();
-  }
+  child.style = null;
+  child.dataset = null;
+  child.uid = null; 
+  child.close?.();
 };
 
 const HostConfig = {
-  now: Date.now,
+  // --- Core Methods ---
   getPublicInstance: (instance) => {
     //for supporting refs
     return instance;
@@ -42,11 +40,36 @@ const HostConfig = {
     };
     return context;
   },
-  prepareForCommit: () => {},
-  resetAfterCommit: () => {},
   getChildHostContext: () => {
     return {};
   },
+  prepareForCommit: () => {
+    return null;
+  },
+  resetAfterCommit: () => {},
+  preparePortalMount: () => {},
+  
+  // --- Scheduling ---
+  scheduleTimeout: setTimeout,
+  cancelTimeout: clearTimeout,
+  noTimeout: -1,
+  supportsMicrotasks: true,
+  scheduleMicrotask: typeof queueMicrotask === 'function' 
+    ? queueMicrotask 
+    : (fn) => Promise.resolve().then(fn),
+  
+  // --- Mode Configuration ---
+  isPrimaryRenderer: true,
+  supportsMutation: true,
+  supportsPersistence: false,
+  supportsHydration: false,
+  
+  // --- Event Priority ---
+  getCurrentEventPriority: () => {
+    return DefaultEventPriority;
+  },
+  
+  // --- Instance Lifecycle ---
   shouldSetTextContent: function (type, props) {
     // Keep text as a prop for our `Text` host component, not as separate text children.
     if (type === "Text") {
@@ -74,7 +97,6 @@ const HostConfig = {
       workInProgress,
       uid,
     );
-    instanceMap.set(uid, instance);
     return instance;
   },
   createTextInstance: (
@@ -92,34 +114,45 @@ const HostConfig = {
       workInProgress,
       uid,
     );
-    instanceMap.set(uid, instance);
     return instance;
   },
   appendInitialChild: (parent, child) => {
     parent.appendChild(child);
   },
+  finalizeInitialChildren: (yueElement, type, props) => {
+    return true;
+  },
+  prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext) {
+    return true;
+  },
+
+  // --- Mutation Methods ---
   appendChild(parent, child) {
     parent.appendChild(child);
   },
-  finalizeInitialChildren: (yueElement, type, props) => {
-    return true;
+  appendChildToContainer: function (container, child) {
+    container.add(child);
   },
   insertBefore: (parent, child, beforeChild) => {
     parent.insertBefore(child, beforeChild);
   },
-  supportsMutation: true,
-  appendChildToContainer: function (container, child) {
-    container.add(child);
-  },
   insertInContainerBefore: (container, child, beforeChild) => {
     container.insertBefore(child, beforeChild);
   },
+  removeChild(parent, child) {
+    parent?.removeChild(child);
+  },
   removeChildFromContainer: (container, child) => {
     container.delete(child);
-    cleanupInstance(child, { destroy: true });
   },
-  prepareUpdate(instance, oldProps, newProps) {
-    return true;
+  resetTextContent: (instance) => {},
+  commitTextUpdate(textInstance, oldText, newText) {
+    textInstance.setText(newText);
+  },
+  commitMount: function (instance, type, newProps, internalInstanceHandle) {
+    instanceMap.set(instance.uid, instance);
+    const { commitMount } = getComponentByTagName(type);
+    return commitMount(instance, newProps, internalInstanceHandle);
   },
   commitUpdate: function (
     instance,
@@ -138,17 +171,36 @@ const HostConfig = {
       finishedWork,
     );
   },
-  commitTextUpdate(textInstance, oldText, newText) {
-    textInstance.setText(newText);
+  
+  // --- Visibility Methods (for Suspense) ---
+  hideInstance: (instance) => {
+    instance.setStyle?.({ opa: 0 });
   },
-  removeChild(parent, child) {
-    parent?.removeChild(child);
-    cleanupInstance(child, { destroy: false });
+  hideTextInstance: (textInstance) => {
+    textInstance.setStyle?.({ opa: 0 });
   },
-  commitMount: function (instance, type, newProps, internalInstanceHandle) {
-    const { commitMount } = getComponentByTagName(type);
-    return commitMount(instance, newProps, internalInstanceHandle);
+  unhideInstance: (instance, props) => {
+    instance.setStyle?.({ opa: 255 });
   },
+  unhideTextInstance: (textInstance, text) => {
+    textInstance.setStyle?.({ opa: 255 });
+  },
+  
+  // --- Cleanup ---
+  clearContainer: (container) => {
+    // Clear all children from the container
+    container.clear?.();
+  },
+  detachDeletedInstance: (instance) => {
+    cleanupInstance(instance);
+  },
+
+  // --- Other required methods ---
+  getInstanceFromNode: () => null,
+  beforeActiveInstanceBlur: () => {},
+  afterActiveInstanceBlur: () => {},
+  prepareScopeUpdate: () => {},
+  getInstanceFromScope: () => null,
 };
 
 export default Reconciler(HostConfig);

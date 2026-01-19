@@ -97,9 +97,8 @@ static JSValue GIFConstructor(JSContext *ctx, JSValueConst new_target, int argc,
 
 static void GIFFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, GIFClassID);
-    LV_LOG_USER("GIF %s release", th->uid);
     if (th) {
-        delete static_cast<GIF*>(th->comp);
+        LV_LOG_USER("GIF %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

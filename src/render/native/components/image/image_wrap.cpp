@@ -117,9 +117,8 @@ static JSValue ImageConstructor(JSContext *ctx, JSValueConst new_target, int arg
 
 static void ImageFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, ImageClassID);
-    LV_LOG_USER("Image %s release", th->uid);
     if (th) {
-        delete static_cast<Image*>(th->comp);
+        LV_LOG_USER("Image %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

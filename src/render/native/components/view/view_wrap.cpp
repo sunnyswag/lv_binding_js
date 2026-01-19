@@ -100,9 +100,8 @@ static JSValue ViewConstructor(JSContext *ctx, JSValueConst new_target, int argc
 
 static void ViewFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, ViewClassID);
-    LV_LOG_USER("View %s release", th->uid);
     if (th) {
-        delete static_cast<View*>(th->comp);
+        LV_LOG_USER("View %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

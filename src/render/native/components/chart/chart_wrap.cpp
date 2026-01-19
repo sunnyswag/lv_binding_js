@@ -666,9 +666,8 @@ static JSValue ChartConstructor(JSContext *ctx, JSValueConst new_target, int arg
 
 static void ChartFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, ChartClassID);
-    LV_LOG_USER("Chart %s release", th->uid);
     if (th) {
-        delete static_cast<Chart*>(th->comp);
+        LV_LOG_USER("Chart %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

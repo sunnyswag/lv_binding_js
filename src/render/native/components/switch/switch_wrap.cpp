@@ -129,9 +129,8 @@ static JSValue SwitchConstructor(JSContext *ctx, JSValueConst new_target, int ar
 
 static void ViewFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, SwitchClassID);
-    LV_LOG_USER("Switch %s release", th->uid);
     if (th) {
-        delete static_cast<Switch*>(th->comp);
+        LV_LOG_USER("Switch %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

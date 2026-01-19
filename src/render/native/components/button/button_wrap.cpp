@@ -87,9 +87,8 @@ static JSValue ButtonConstructor(JSContext *ctx, JSValueConst new_target, int ar
 
 static void ButtonFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, ButtonClassID);
-    LV_LOG_USER("Button %s release", th->uid);
     if (th) {
-        delete static_cast<Button*>(th->comp);
+        LV_LOG_USER("Button %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

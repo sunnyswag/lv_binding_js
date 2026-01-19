@@ -154,9 +154,8 @@ static JSValue TabViewConstructor(JSContext *ctx, JSValueConst new_target, int a
 
 static void TabViewFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, TabViewClassID);
-    LV_LOG_USER("TabView %s release", th->uid);
     if (th) {
-        delete static_cast<TabView*>(th->comp);
+        LV_LOG_USER("TabView %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

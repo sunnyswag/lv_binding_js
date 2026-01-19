@@ -159,9 +159,8 @@ static JSValue TextareaConstructor(JSContext *ctx, JSValueConst new_target, int 
 
 static void TextareaFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, TextareaClassID);
-    LV_LOG_USER("Textarea %s release", th->uid);
     if (th) {
-        delete static_cast<Textarea*>(th->comp);
+        LV_LOG_USER("Textarea %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

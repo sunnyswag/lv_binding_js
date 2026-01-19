@@ -112,9 +112,8 @@ static JSValue SliderConstructor(JSContext *ctx, JSValueConst new_target, int ar
 
 static void SliderFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, SliderClassID);
-    LV_LOG_USER("Slider %s release", th->uid);
     if (th) {
-        delete static_cast<Slider*>(th->comp);
+        LV_LOG_USER("Slider %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

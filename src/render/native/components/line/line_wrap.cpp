@@ -118,9 +118,8 @@ static JSValue LineConstructor(JSContext *ctx, JSValueConst new_target, int argc
 
 static void LineFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, LineClassID);
-    LV_LOG_USER("Line %s release", th->uid);
     if (th) {
-        delete static_cast<Line*>(th->comp);
+        LV_LOG_USER("Line %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

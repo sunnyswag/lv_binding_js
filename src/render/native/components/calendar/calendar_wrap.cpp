@@ -156,9 +156,8 @@ static JSValue CalendarConstructor(JSContext *ctx, JSValueConst new_target, int 
 
 static void CalendarFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, CalendarClassID);
-    LV_LOG_USER("Calendar %s release", th->uid);
     if (th) {
-        delete static_cast<Calendar*>(th->comp);
+        LV_LOG_USER("Calendar %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

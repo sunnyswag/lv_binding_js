@@ -121,9 +121,8 @@ static JSValue CheckboxConstructor(JSContext *ctx, JSValueConst new_target, int 
 
 static void CheckboxFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, CheckboxClassID);
-    LV_LOG_USER("Checkbox %s release", th->uid);
     if (th) {
-        delete static_cast<Checkbox*>(th->comp);
+        LV_LOG_USER("Checkbox %s release", th->uid);
         js_free_rt(rt, th);
     }
 };

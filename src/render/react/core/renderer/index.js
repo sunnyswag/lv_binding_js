@@ -31,14 +31,17 @@ export class Renderer {
   static portalContainer;
 
   static render(element, options) {
-    const isConcurrent = false;
-    const hydrate = false;
     const containerInfo = new RootContainer();
-
+    
+    // react-reconciler 0.29.x API:
     Renderer.container = reconciler.createContainer(
-      containerInfo,
-      isConcurrent,
-      hydrate,
+      containerInfo,           // containerInfo
+      0,                       // tag (LegacyRoot)
+      null,                    // hydrationCallbacks
+      false,                   // isStrictMode
+      false,                   // concurrentUpdatesByDefaultOverride
+      '',                      // identifierPrefix
+      (error) => console.error('React error:', error), // onRecoverableError
     );
 
     const parentComponent = null;

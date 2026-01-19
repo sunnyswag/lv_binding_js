@@ -174,9 +174,8 @@ static JSValue DropdownlistConstructor(JSContext *ctx, JSValueConst new_target, 
 
 static void DropdownlistFinalizer(JSRuntime *rt, JSValue val) {
     COMP_REF *th = (COMP_REF *)JS_GetOpaque(val, DropdownlistClassID);
-    LV_LOG_USER("Dropdownlist %s release", th->uid);
     if (th) {
-        delete static_cast<Dropdownlist*>(th->comp);
+        LV_LOG_USER("Dropdownlist %s release", th->uid);
         js_free_rt(rt, th);
     }
 };
