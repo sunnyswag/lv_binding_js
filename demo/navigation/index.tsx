@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MemoryRouter, Route, Routes, useNavigate } from "react-router";
 import {
   AddChildToDefGroup,
   Arc,
@@ -16,8 +17,6 @@ import {
 import { useAutoFocus } from "./useAutoFocus";
 
 const { width, height } = Dimensions.window;
-
-type Page = "home" | "p1" | "p2" | "p3" | "p4";
 
 declare const require: any;
 const messages = (locale: string) => {
@@ -53,15 +52,16 @@ function Header({
   );
 }
 
-function Page1List({ onBack }: { onBack: () => void }) {
+function Page1List() {
   const t = useT();
+  const navigate = useNavigate();
   const items = useMemo(() => Array.from({ length: 40 }).map((_, i) => i + 1), []);
   const firstItemRef = useRef<any>(null);
   useAutoFocus(firstItemRef, []);
 
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p1.title")} onBack={onBack} autoFocusBack={false} />
+      <Header title={t("p1.title")} onBack={() => navigate("/")} autoFocusBack={false} />
 
       <View style={style.content}>
         <View style={style.scrollBox} groupType={AddChildToDefGroup}>
@@ -84,8 +84,9 @@ function Page1List({ onBack }: { onBack: () => void }) {
   );
 }
 
-function Page2Info({ onBack }: { onBack: () => void }) {
+function Page2Info() {
   const t = useT();
+  const navigate = useNavigate();
   const infos = useMemo(
     () => [
       { titleKey: "p2.a.title", bodyKey: "p2.a.body" },
@@ -104,7 +105,7 @@ function Page2Info({ onBack }: { onBack: () => void }) {
   const next = () => setIdx((i) => (i + 1) % infos.length);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p2.title")} onBack={onBack} autoFocusBack />
+      <Header title={t("p2.title")} onBack={() => navigate("/")} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.infoCard}>
@@ -143,14 +144,15 @@ function Page2Info({ onBack }: { onBack: () => void }) {
   );
 }
 
-function Page3Controls({ onBack }: { onBack: () => void }) {
+function Page3Controls() {
   const t = useT();
+  const navigate = useNavigate();
   const [slider, setSlider] = useState(30);
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(true);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p3.title")} onBack={onBack} autoFocusBack />
+      <Header title={t("p3.title")} onBack={() => navigate("/p1")} autoFocusBack />
 
       <View style={style.content}>
         <View style={style.scrollBox} groupType={AddChildToDefGroup}>
@@ -205,8 +207,9 @@ function Page3Controls({ onBack }: { onBack: () => void }) {
   );
 }
 
-function Page4Countdown({ onBack }: { onBack: () => void }) {
+function Page4Countdown() {
   const t = useT();
+  const navigate = useNavigate();
   const total = 60;
   const [remain, setRemain] = useState(total);
 
@@ -222,7 +225,7 @@ function Page4Countdown({ onBack }: { onBack: () => void }) {
   const angle = Math.floor((elapsed / total) * 360);
   return (
     <View style={style.pageRoot}>
-      <Header title={t("p4.title")} onBack={onBack} autoFocusBack />
+      <Header title={t("p4.title")} onBack={() => navigate("/")} autoFocusBack />
 
       <View style={style.centerContent}>
         <Arc
@@ -283,8 +286,9 @@ function LangSwitcher() {
   );
 }
 
-function Home({ go }: { go: (p: Page) => void }) {
+function Home() {
   const t = useT();
+  const navigate = useNavigate();
   const btnW = Math.floor((width - 24 * 2 - 12) / 2);
   const btnH = 72;
 
@@ -300,28 +304,28 @@ function Home({ go }: { go: (p: Page) => void }) {
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
-          onClick={() => go("p1")}
+          onClick={() => navigate("/p1")}
         >
           <Text style={style.homeBtnText}>{t("nav.page1")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
-          onClick={() => go("p2")}
+          onClick={() => navigate("/p2")}
         >
           <Text style={style.homeBtnText}>{t("nav.page2")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
-          onClick={() => go("p3")}
+          onClick={() => navigate("/p3")}
         >
           <Text style={style.homeBtnText}>{t("nav.page3")}</Text>
         </Button>
         <Button
           style={[style.homeBtn, { width: btnW, height: btnH }]}
           onFocusedStyle={style.focused}
-          onClick={() => go("p4")}
+          onClick={() => navigate("/p4")}
         >
           <Text style={style.homeBtnText}>{t("nav.page4")}</Text>
         </Button>
@@ -331,14 +335,17 @@ function Home({ go }: { go: (p: Page) => void }) {
 }
 
 function App() {
-  const [page, setPage] = useState<Page>("home");
-  const backToHome = () => setPage("home");
-
-  if (page === "p1") return <Page1List onBack={backToHome} />;
-  if (page === "p2") return <Page2Info onBack={backToHome} />;
-  if (page === "p3") return <Page3Controls onBack={backToHome} />;
-  if (page === "p4") return <Page4Countdown onBack={backToHome} />;
-  return <Home go={setPage} />;
+  return (
+    <MemoryRouter initialEntries={["/"]}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/p1" element={<Page1List />} />
+        <Route path="/p2" element={<Page2Info />} />
+        <Route path="/p3" element={<Page3Controls />} />
+        <Route path="/p4" element={<Page4Countdown />} />
+      </Routes>
+    </MemoryRouter>
+  );
 }
 
 function Root() {
