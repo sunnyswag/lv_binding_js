@@ -49,6 +49,7 @@ function App() {
         {Array.from({ length: pageCount }).map((_, i) => (
           <View
             onFocusedStyle={style.pageFocused}
+            addToFocusGroup
             key={i}
             ref={(ins) => (pageRefs.current[i] = ins)}
             style={[
