@@ -14,30 +14,6 @@ WRAPPED_SCROLL_INTO_VIEW(Switch, "Switch")
 WRAPPED_FOCUS(Switch, "Switch")
 WRAPPED_JS_CLOSE_COMPONENT(Switch, "Switch")
 
-static JSValue NativeCompRemoveChild(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
-    if (argc >= 1 && JS_IsObject(argv[0])) {
-        JSClassID _class_id;
-        COMP_REF* child = (COMP_REF*)JS_GetAnyOpaque(argv[0], &_class_id);
-        COMP_REF* parent = (COMP_REF*)JS_GetOpaque(this_val, SwitchClassID);
-
-        ((Switch*)(parent->comp))->removeChild((void*)(child->comp));
-        LV_LOG_USER("Switch %s remove child %s", parent->uid, child->uid);
-    }
-    return JS_UNDEFINED;
-};
-
-static JSValue NativeCompAppendChild(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
-    if (argc >= 1 && JS_IsObject(argv[0])) {
-        JSClassID _class_id;
-        COMP_REF* child = (COMP_REF*)JS_GetAnyOpaque(argv[0], &_class_id);
-        COMP_REF* parent = (COMP_REF*)JS_GetOpaque(this_val, SwitchClassID);
-
-        ((Switch*)(parent->comp))->appendChild((void*)(child->comp));
-        LV_LOG_USER("Switch %s append child %s", parent->uid, child->uid);
-    }
-    return JS_UNDEFINED;
-};
-
 static JSValue NativeCompSetChecked(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
     if (argc >= 1 && JS_IsBool(argv[0])) {
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, SwitchClassID);

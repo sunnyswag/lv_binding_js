@@ -347,7 +347,7 @@ static JSValue NativeCompSetLeftAxisData(JSContext *ctx, JSValueConst this_val, 
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ChartClassID);
 
         std::vector<axis_data> data;
-        int32_t len1, len2, i, color, data_item;
+        int32_t len1, len2, color, data_item;
         JSValue item_value;
         JSValue color_value;
         JSValue data_value;
@@ -396,7 +396,7 @@ static JSValue NativeCompSetRightAxisData(JSContext *ctx, JSValueConst this_val,
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ChartClassID);
 
         std::vector<axis_data> data;
-        int32_t len1, len2, i, color, data_item;
+        int32_t len1, len2, color, data_item;
         JSValue item_value;
         JSValue color_value;
         JSValue data_value;
@@ -445,7 +445,7 @@ static JSValue NativeCompSetScatterData (JSContext *ctx, JSValueConst this_val, 
         COMP_REF* ref = (COMP_REF*)JS_GetOpaque(this_val, ChartClassID);
 
         std::vector<axis_data> data;
-        int32_t len1, len2, i, color, data_item;
+        int32_t len1, len2, color, data_item;
         JSValue item_value;
         JSValue color_value;
         JSValue data_value;

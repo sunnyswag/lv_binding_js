@@ -165,7 +165,7 @@ void BasicComponent::setStyle(JSContext* ctx, JSValue& obj, std::vector<std::str
     //     this->initStyle(type);
     // }
 
-    for(int i=0; i < keys.size(); i++) {
+    for(size_t i=0; i < keys.size(); i++) {
         std::string key = keys[i];
 
         if (StyleManager::styles.count(key) > 0) {
@@ -176,7 +176,7 @@ void BasicComponent::setStyle(JSContext* ctx, JSValue& obj, std::vector<std::str
         }
     }
 
-    for(int i=0; i < keys.size(); i++) {
+    for(size_t i=0; i < keys.size(); i++) {
         std::string key = keys[i];
         if (key == "transition") {
             JSValue value = JS_GetPropertyStr(ctx, obj, key.c_str());
