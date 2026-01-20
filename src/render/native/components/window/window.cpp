@@ -14,6 +14,14 @@ lv_obj_t* GetWindowInstance () {
 //     // this->initStyle(LV_PART_MAIN);
 // };
 
+static void scrollbar_mode_event_cb(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CHILD_CREATED) {
+        lv_obj_t * child = (lv_obj_t *)lv_event_get_param(e);
+        if (child) lv_obj_set_scrollbar_mode(child, LV_SCROLLBAR_MODE_OFF);
+    }
+}
+
 void WindowInit () {
     lv_disp_t* disp_default = lv_disp_get_default();
     window_instance = lv_obj_create(lv_scr_act());
@@ -22,4 +30,7 @@ void WindowInit () {
     lv_obj_set_style_pad_all(window_instance, 0, 0);
     lv_obj_set_style_radius(window_instance, 0, 0);
     lv_obj_set_style_border_width(window_instance, 0, 0);
+    
+    lv_obj_set_scrollbar_mode(window_instance, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_add_event_cb(lv_scr_act(), scrollbar_mode_event_cb, LV_EVENT_CHILD_CREATED, NULL);
 };

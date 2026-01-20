@@ -117,19 +117,15 @@ const style: Record<string, any> = {
     "border-width": 0,
     "border-radius": 0,
 
-    // flex 横向排布
     display: "flex",
-    "flex-flow": 0, // LV_FLEX_FLOW_ROW（用数值是为了符合你们 style.cpp 的 JS_ToInt32）
+    "flex-direction": "column",
 
-    // 开启滚动 + 惯性
     overflow: 0, // 0 -> add_flag(SCROLLABLE)
     "overflow-scrolling": 1,
 
-    // 开启 X 方向 snap（枚举值见 LV_SCROLL_SNAP_*）
     "scroll-snap-x": 3, // LV_SCROLL_SNAP_CENTER（本仓库 lvgl: NONE=0 START=1 END=2 CENTER=3）
   },
 
-  // 每一页：固定为一屏大小，并允许被 snap
   page: {
     width,
     height: height - 80,
@@ -151,7 +147,7 @@ const style: Record<string, any> = {
     height: 80,
     display: "flex",
     "flex-flow": 0, // row
-    "justify-content": 3, // space-evenly（你们 style.cpp 直接把 int cast 成 lv_flex_align_t）
+    "justify-content": 3, // space-evenly
     "align-items": 2, // center
     "background-color": "grey",
   },
