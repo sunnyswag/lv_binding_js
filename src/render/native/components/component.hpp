@@ -162,6 +162,7 @@ void NativeComponentMaskInit (JSContext* ctx, JSValue ns);
             BasicComponent* comp = (BasicComponent*)(ref->comp);                                                            \
             if (comp->instance) {                                                                                           \
                 lv_group_add_obj(lv_group_get_default(), comp->instance);                                                    \
+                lv_obj_add_flag(comp->instance, LV_OBJ_FLAG_SCROLL_ON_FOCUS);                                                \
             }                                                                                                               \
         }                                                                                                                   \
         return JS_UNDEFINED;                                                                                                \

@@ -7,7 +7,6 @@ GIF::GIF(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
     this->uid = uid;
     this->instance = lv_gif_create(parent != nullptr ? parent : GetWindowInstance());
 
-    lv_obj_clear_flag(this->instance, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     lv_obj_add_flag(this->instance, LV_OBJ_FLAG_EVENT_BUBBLE | LV_OBJ_FLAG_CLICKABLE);
     lv_img_set_size_mode(this->instance, LV_IMG_SIZE_MODE_REAL);
     lv_obj_set_user_data(this->instance, this);

@@ -8,7 +8,6 @@ Textarea::Textarea(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
 
     lv_obj_set_user_data(this->instance, this);
     lv_obj_add_flag(this->instance, LV_OBJ_FLAG_CLICK_FOCUSABLE);
-    lv_obj_clear_flag(this->instance, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     this->initStyle(LV_PART_MAIN);
     this->initStyle(LV_STATE_FOCUSED);
 
