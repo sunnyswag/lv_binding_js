@@ -79,7 +79,7 @@ class BasicComponent {
 
     void appendChild(void* child);
     void removeChild(void* child);
-    void insertChildBefore(void *child);
+    void insertChildBefore(void *child, void *beforeChild);
 
     void moveToFront ();
     void moveToBackground ();

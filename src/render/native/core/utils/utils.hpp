@@ -7,9 +7,10 @@
 
 extern "C" {
     #include "lvgl.h"
-
     #include "private.h"
 };
+
+void reorderFocusGroup(lv_obj_t * parent);
 
 template<size_t BlockSize, size_t BlockNum = 10>
 class MemoryPool {

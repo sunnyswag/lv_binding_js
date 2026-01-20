@@ -104,12 +104,13 @@ void NativeComponentMaskInit (JSContext* ctx, JSValue ns);
 
 #define WRAPPED_INSERT_CHILD(COMPONENT,COMPONENT_NAME)                                                                      \
     static JSValue NativeCompInsertChildBefore(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {       \
-        if (argc >= 1 && JS_IsObject(argv[0])) {                                                                            \
+        if (argc >= 1 && JS_IsObject(argv[0]) && JS_IsObject(argv[1])) {                                                                            \
             JSClassID _class_id;                                                                                            \
             COMP_REF* child = (COMP_REF*)JS_GetAnyOpaque(argv[0], &_class_id);                                              \
+            COMP_REF* beforeChild = (COMP_REF*)JS_GetAnyOpaque(argv[1], &_class_id);                                       \
             COMP_REF* parent = (COMP_REF*)JS_GetAnyOpaque(this_val, &_class_id);                                            \
                                                                                                                             \
-            ((COMPONENT*)(parent->comp))->insertChildBefore((void*)(child->comp));                                          \
+            ((COMPONENT*)(parent->comp))->insertChildBefore((void*)(child->comp), (void*)(beforeChild->comp));                                          \
             LV_LOG_USER("%s %s insertChildBefore %s", COMPONENT_NAME, parent->uid, child->uid);                             \
         }                                                                                                                   \
         return JS_UNDEFINED;                                                                                                \

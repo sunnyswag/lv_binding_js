@@ -35,13 +35,15 @@ bool BasicComponent::isEventRegist(int eventType) {
     return this->registeEvents.count(eventType) > 0;
 };
 
-void BasicComponent::insertChildBefore(void *child) {
-    BasicComponent* childComp = static_cast<BasicComponent*>(child);
+void BasicComponent::insertChildBefore(void *child, void *beforeChild) {
+    BasicComponent* childComp = static_cast<BasicComponent*>(child);    
+    BasicComponent* beforeChildComp = static_cast<BasicComponent*>(beforeChild);
     childComp->parent_instance = this->instance;
     if (!childComp->is_fixed && childComp->type != COMP_TYPE_MASK) {
         lv_obj_set_parent(childComp->instance, this->instance);
-        uint32_t index = lv_obj_get_index(childComp->instance);
+        uint32_t index = lv_obj_get_index(beforeChildComp->instance);
         lv_obj_move_to_index(childComp->instance, index);
+        reorderFocusGroup(this->instance);
     }
 };
 
