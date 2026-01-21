@@ -78,59 +78,81 @@ function Page1List() {
 }
 
 function Page2Info() {
+  const pageCount = 4;
+  const pagerRef = useRef<any>();
+  const pageRefs = useRef<any[]>([]);
+
+  const [active, setActive] = useState(0);
   const t = useT();
-  const infos = useMemo(
-    () => [
-      { titleKey: "p2.a.title", bodyKey: "p2.a.body" },
-      { titleKey: "p2.b.title", bodyKey: "p2.b.body" },
-      { titleKey: "p2.c.title", bodyKey: "p2.c.body" },
-      { titleKey: "p2.d.title", bodyKey: "p2.d.body" },
-      { titleKey: "p2.e.title", bodyKey: "p2.e.body" },
-    ],
-    [],
+
+  const pageColors = useMemo(
+    () => ["red", "blue", "green", "orange"],
+    []
   );
 
-  const [idx, setIdx] = useState(0);
-  const cur = infos[idx];
+  const scrollTo = (idx: number) => {
+    if (idx < 0 || idx >= pageCount) return;
+    setActive(idx);
+    const target = pageRefs.current[idx];
+    target?.scrollIntoView?.();
+  };
 
-  const prev = () => setIdx((i) => (i - 1 + infos.length) % infos.length);
-  const next = () => setIdx((i) => (i + 1) % infos.length);
+  useEffect(() => {
+    scrollTo(0);
+  }, []);
+
   return (
     <View style={style.pageRoot}>
       <Header title={t("p2.title")} autoFocusBack />
-
-      <View style={style.content}>
-        <View style={style.infoCard}>
-          <Text style={style.infoTitle}>{t(cur.titleKey)}</Text>
-          <Text style={style.infoBody}>{t(cur.bodyKey)}</Text>
-        </View>
-
-        <View style={style.infoControls}>
-          <Button
-            style={style.navBtn}
-            onFocusedStyle={style.focused}
-            onClick={prev}
+      <View
+        ref={pagerRef}
+        style={style.pager}
+      >
+        {Array.from({ length: pageCount }).map((_, i) => (
+          <View
+            onFocusedStyle={style.pageFocused}
+            addToFocusGroup
+            key={i}
+            ref={(ins) => (pageRefs.current[i] = ins)}
+            style={[
+              style.page,
+              { "background-color": pageColors[i % pageColors.length] },
+            ]}
           >
-            <Text style={style.navBtnText}>{t("p2.prev")}</Text>
-          </Button>
+            <Text style={style.pageTitle}>Page {i + 1}</Text>
+            <Text style={style.pageDesc}>
+              flex-row + scroll-snap-x + scrollIntoView()
+            </Text>
+          </View>
+        ))}
+      </View>
 
-          <Button
-            style={style.navBtn}
-            onFocusedStyle={style.focused}
-            onClick={next}
-          >
-            <Text style={style.navBtnText}>{t("p2.next")}</Text>
-          </Button>
-        </View>
+      <View style={style.controls}>
+        <Button
+          style={style.navBtn}
+          onClick={() => scrollTo(active - 1)}
+        >
+          <Text>{"<"}</Text>
+        </Button>
 
         <View style={style.dots}>
-          {infos.map((_, i) => (
+          {Array.from({ length: pageCount }).map((_, i) => (
             <View
               key={i}
-              style={[style.dot, i === idx ? style.dotActive : style.dotInactive]}
+              style={[
+                style.dot,
+                i === active ? style.dotActive : style.dotInactive,
+              ]}
             />
           ))}
         </View>
+
+        <Button
+          style={style.navBtn}
+          onClick={() => scrollTo(active + 1)}
+        >
+          <Text>{">"}</Text>
+        </Button>
       </View>
     </View>
   );
@@ -443,31 +465,83 @@ const style: Record<string, any> = {
     "align-items": "center",
   },
   navBtn: {
-    width: 64,
-    height: 44,
-    "border-radius": 12,
+    width: 60,
+    height: 50,
+    "border-radius": 25,
     "background-color": "white",
-    display: "flex",
-    "align-items": "center",
-    "justify-content": "center",
   },
   navBtnText: { "text-color": "black", "font-size": 18 },
   dots: {
-    width: width - 24,
-    height: 30,
     display: "flex",
-    "flex-direction": "row",
-    "justify-content": "center",
-    "align-items": "center",
+    "flex-flow": 0, // row
+    "justify-content": 3,
+    "align-items": 2,
+    width: width - 140,
+    height: 50,
   },
   dot: {
     width: 10,
     height: 10,
     "border-radius": 0x7fff,
-    margin: "0 4px",
   },
-  dotActive: { "background-color": "white", opacity: 255 },
-  dotInactive: { "background-color": "grey", opacity: 80 },
+  dotActive: {
+    "background-color": "white",
+    opacity: 255,
+  },
+  dotInactive: {
+    "background-color": "grey",
+    opacity: 80,
+  },
+  pageFocused: {
+    "background-color": "white",
+    opacity: 255,
+  },
+  // 横向滚动容器
+  pager: {
+    width,
+    height: height - 80,
+    "border-width": 0,
+    "border-radius": 0,
+
+    display: "flex",
+    "flex-direction": "column",
+
+    overflow: 0, // 0 -> add_flag(SCROLLABLE)
+    "overflow-scrolling": 1,
+
+    "scroll-snap-x": 3, // LV_SCROLL_SNAP_CENTER（本仓库 lvgl: NONE=0 START=1 END=2 CENTER=3）
+  },
+  page: {
+    width,
+    height: height - 80,
+    "border-radius": 0,
+    "border-width": 0,
+    "padding": 16,
+    "scroll-enable-snap": 1,
+  },
+  pageTitle: {
+    "text-color": "white",
+  },
+  pageDesc: {
+    "text-color": "white",
+  },
+  controls: {
+    width,
+    height: 80,
+    display: "flex",
+    "flex-flow": 0, // row
+    "justify-content": 3, // space-evenly
+    "align-items": 2, // center
+    "background-color": "grey",
+  },
+  debugBar: {
+    width,
+    height: 40,
+    "background-color": "black",
+  },
+  debugText: {
+    "text-color": "white",
+  },
 
   sectionTitle: {
     "text-color": "white",
