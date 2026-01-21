@@ -376,6 +376,7 @@ const style: Record<string, any> = {
     "background-color": "black",
     display: "flex",
     "flex-direction": "column",
+    overflow: "hidden",
   },
 
   header: {
