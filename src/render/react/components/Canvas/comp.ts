@@ -1,8 +1,7 @@
-import { CommonProps, OnClickEvent } from "../common";
+import { setComponentProps, CommonProps, OnClickEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
   handleEvent,
-  setStyle,
   styleGetterProp,
 } from "../config";
 import CanvasContext from "./context";
@@ -16,53 +15,16 @@ export type CanvasProps = CommonProps & {
   alignTo?: { type: number; pos: [number, number]; parent: any };
 };
 
-function setCanvasProps(comp, newProps: CanvasProps, oldProps: CanvasProps) {
-  const setter = {
-    set style(styleSheet) {
-      setStyle({
-        comp,
-        styleSheet,
-        compName: "Canvas",
-        styleType: 0x0000,
-        oldStyleSheet: oldProps.style,
-      });
-    },
-    set onClick(fn) {
-      handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_CLICKED);
-    },
-    set align({ type, pos = [0, 0] }) {
-      if (
-        !type ||
-        (type === oldProps.align?.type &&
-          pos[0] === oldProps.align?.pos?.[0] &&
-          pos[1] === oldProps.align?.pos?.[1])
-      )
-        return;
-      comp.align(type, pos);
-    },
-    set alignTo({ type, pos = [0, 0], parent }) {
-      if (
-        !type ||
-        (type === oldProps.alignTo?.type &&
-          pos[0] === (oldProps.alignTo?.pos?.[0] || 0) &&
-          pos[1] === (oldProps.alignTo?.pos?.[1] || 0) &&
-          parent?.uid === oldProps.alignTo?.parent?.uid)
-      )
-        return;
-      comp.alignTo(type, pos, parent);
-    },
-  };
-  Object.assign(setter, newProps);
-  comp.dataset = {};
-  Object.keys(newProps).forEach((prop) => {
-    const index = prop.indexOf("data-");
-    if (index === 0) {
-      comp.dataset[prop.substring(5)] = newProps[prop];
-    }
-  });
-}
+const canvasSetters = {
+  onClick(comp, fn) {
+    handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_CLICKED);
+  },
+};
 
 export class CanvasComp extends NativeButton {
+  uid: string;
+  style: any;
+  
   constructor({ uid }) {
     super({ uid });
     this.uid = uid;
@@ -71,14 +33,15 @@ export class CanvasComp extends NativeButton {
     const that = this;
     this.style = new Proxy(this, {
       get(obj, prop) {
-        if (styleGetterProp.includes(prop)) {
-          return style[prop].call(that);
+        const propStr = String(prop);
+        if (styleGetterProp.includes(propStr)) {
+          return style[propStr].call(that);
         }
       },
     });
   }
   setProps(newProps: CanvasProps, oldProps: CanvasProps) {
-    setCanvasProps(this, newProps, oldProps);
+    setComponentProps(this, "Canvas", newProps, oldProps, canvasSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Canvas";

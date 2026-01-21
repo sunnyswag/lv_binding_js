@@ -1,5 +1,5 @@
 import { StyleProps } from "../../core/style";
-import { CommonComponentApi, CommonProps, OnChangeEvent } from "../common/index";
+import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
   STYLE_TYPE,
@@ -18,47 +18,34 @@ export type SwitchProps = CommonProps & {
   disabled?: boolean;
 };
 
-function setSwitchProps(comp, newProps: SwitchProps, oldProps: SwitchProps) {
-  const setter = {
-    ...CommonComponentApi({ compName: "Switch", comp, newProps, oldProps }),
-    checkedStyle(styleSheet) {
-      setStyle({
-        comp,
-        styleSheet,
-        compName: "Switch",
-        styleType: STYLE_TYPE.STATE_CHECKED,
-        oldStyleSheet: oldProps.checkedStyle,
-      });
-    },
-    onChange(fn) {
-      handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
-    },
-    checked(val) {
-      if (isNaN(val)) return;
-      if (val == oldProps.value) return;
-      comp.setChecked(val);
-    },
-    disabled(val) {
-      if (val !== oldProps.disabled) {
-        comp.setDisabled(val);
-      }
-    },
-  };
-  Object.keys(setter).forEach((key) => {
-    if (newProps.hasOwnProperty(key)) {
-      setter[key](newProps[key]);
+const switchSetters = {
+  checkedStyle(comp, styleSheet, oldProps) {
+    setStyle({
+      comp,
+      styleSheet,
+      compName: "Switch",
+      styleType: STYLE_TYPE.STATE_CHECKED,
+      oldStyleSheet: oldProps.checkedStyle,
+    });
+  },
+  onChange(comp, fn) {
+    handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
+  },
+  checked(comp, val, oldProps) {
+    if (val === oldProps.checked) return;
+    comp.setChecked(val);
+  },
+  disabled(comp, val, oldProps) {
+    if (val !== oldProps.disabled) {
+      comp.setDisabled(val);
     }
-  });
-  comp.dataset = {};
-  Object.keys(newProps).forEach((prop) => {
-    const index = prop.indexOf("data-");
-    if (index === 0) {
-      comp.dataset[prop.substring(5)] = newProps[prop];
-    }
-  });
-}
+  },
+};
 
 export class SwitchComp extends NativeComp {
+  uid: string;
+  style: any;
+  
   constructor({ uid }) {
     super({ uid });
     this.uid = uid;
@@ -67,14 +54,15 @@ export class SwitchComp extends NativeComp {
     const that = this;
     this.style = new Proxy(this, {
       get(obj, prop) {
-        if (styleGetterProp.includes(prop)) {
-          return style[prop].call(that);
+        const propStr = String(prop);
+        if (styleGetterProp.includes(propStr)) {
+          return style[propStr].call(that);
         }
       },
     });
   }
   setProps(newProps, oldProps) {
-    setSwitchProps(this, newProps, oldProps);
+    setComponentProps(this, "Switch", newProps, oldProps, switchSetters);
   }
   insertBefore(child, beforeChild) {
     this.insertChildBefore(child, beforeChild);

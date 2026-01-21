@@ -1,8 +1,7 @@
-import { CommonComponentApi, CommonProps, OnChangeEvent } from "../common/index";
+import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
   handleEvent,
-  setStyle,
   styleGetterProp,
 } from "../config";
 
@@ -16,49 +15,37 @@ export type CalendarProps = CommonProps & {
   onChange?: (event: OnChangeEvent) => void;
 };
 
-function setCalendarProps(comp, newProps: CalendarProps, oldProps: CalendarProps) {
-  const setter = {
-    ...CommonComponentApi({ compName: "Calendar", comp, newProps, oldProps }),
-    onChange(fn) {
-      handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
-    },
-    today(today) {
-      if (today && today !== oldProps.today) {
-        const date = new Date(today);
-        comp.setToday(date.getFullYear(), date.getMonth() + 1, date.getDate());
-      }
-    },
-    shownMonth(month) {
-      if (month && month !== oldProps.shownMonth) {
-        const date = new Date(month);
-        comp.setShownMonth(date.getFullYear(), date.getMonth() + 1);
-      }
-    },
-    highLightDates(dates) {
-      if (Array.isArray(dates) && dates !== oldProps.highLightDates) {
-        dates = dates.map((item) => {
-          const date = new Date(item);
-          return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
-        });
-        comp.setHighlightDates(dates, dates.length);
-      }
-    },
-  };
-  Object.keys(setter).forEach((key) => {
-    if (newProps.hasOwnProperty(key)) {
-      setter[key](newProps[key]);
+const calendarSetters = {
+  onChange(comp, fn) {
+    handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
+  },
+  today(comp, today, oldProps) {
+    if (today && today !== oldProps.today) {
+      const date = new Date(today);
+      comp.setToday(date.getFullYear(), date.getMonth() + 1, date.getDate());
     }
-  });
-  comp.dataset = {};
-  Object.keys(newProps).forEach((prop) => {
-    const index = prop.indexOf("data-");
-    if (index === 0) {
-      comp.dataset[prop.substring(5)] = newProps[prop];
+  },
+  shownMonth(comp, month, oldProps) {
+    if (month && month !== oldProps.shownMonth) {
+      const date = new Date(month);
+      comp.setShownMonth(date.getFullYear(), date.getMonth() + 1);
     }
-  });
-}
+  },
+  highLightDates(comp, dates, oldProps) {
+    if (Array.isArray(dates) && dates !== oldProps.highLightDates) {
+      dates = dates.map((item) => {
+        const date = new Date(item);
+        return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+      });
+      comp.setHighlightDates(dates, dates.length);
+    }
+  },
+};
 
 export class CalendarComp extends NativeCalendar {
+  uid: string;
+  style: any;
+  
   constructor({ uid }) {
     super({ uid });
     this.uid = uid;
@@ -67,14 +54,15 @@ export class CalendarComp extends NativeCalendar {
     const that = this;
     this.style = new Proxy(this, {
       get(obj, prop) {
-        if (styleGetterProp.includes(prop)) {
-          return style[prop].call(that);
+        const propStr = String(prop);
+        if (styleGetterProp.includes(propStr)) {
+          return style[propStr].call(that);
         }
       },
     });
   }
   setProps(newProps: CalendarProps, oldProps: CalendarProps) {
-    setCalendarProps(this, newProps, oldProps);
+    setComponentProps(this, "Calendar", newProps, oldProps, calendarSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Calendar";

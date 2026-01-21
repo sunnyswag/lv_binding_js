@@ -1,8 +1,5 @@
-import { CommonComponentApi, CommonProps } from "../common/index";
+import { setComponentProps, CommonProps } from "../common/index";
 import {
-  EVENTTYPE_MAP,
-  handleEvent,
-  setStyle,
   styleGetterProp,
 } from "../config";
 
@@ -13,33 +10,21 @@ export type LineProps = CommonProps & {
   points: [number, number][];
 };
 
-function setLineProps(comp, newProps, oldProps) {
-  const setter = {
-    ...CommonComponentApi({ compName: "Keyboard", comp, newProps, oldProps }),
-    points(points) {
-      if (
-        (Array.isArray(points) && points !== oldProps?.points) ||
-        points?.length !== oldProps?.points?.length
-      ) {
-        comp.setPoints(points, points.length);
-      }
-    },
-  };
-  Object.keys(setter).forEach((key) => {
-    if (newProps.hasOwnProperty(key)) {
-      setter[key](newProps[key]);
+const lineSetters = {
+  points(comp, points, oldProps) {
+    if (
+      (Array.isArray(points) && points !== oldProps?.points) ||
+      points?.length !== oldProps?.points?.length
+    ) {
+      comp.setPoints(points, points.length);
     }
-  });
-  comp.dataset = {};
-  Object.keys(newProps).forEach((prop) => {
-    const index = prop.indexOf("data-");
-    if (index === 0) {
-      comp.dataset[prop.substring(5)] = newProps[prop];
-    }
-  });
-}
+  },
+};
 
 export class LineComp extends NativeLine {
+  uid: string;
+  style: any;
+  
   constructor({ uid }) {
     super({ uid });
     this.uid = uid;
@@ -48,14 +33,15 @@ export class LineComp extends NativeLine {
     const that = this;
     this.style = new Proxy(this, {
       get(obj, prop) {
-        if (styleGetterProp.includes(prop)) {
-          return style[prop].call(that);
+        const propStr = String(prop);
+        if (styleGetterProp.includes(propStr)) {
+          return style[propStr].call(that);
         }
       },
     });
   }
   setProps(newProps: LineProps, oldProps: LineProps) {
-    setLineProps(this, newProps, oldProps);
+    setComponentProps(this, "Line", newProps, oldProps, lineSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Line";
