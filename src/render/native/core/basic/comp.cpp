@@ -1,6 +1,7 @@
 #include "./comp.hpp"
 
 #include "native/core/utils/utils.hpp"
+#include "native/core/style/style.hpp"
 
 std::unordered_map<std::string, BasicComponent*> comp_map;
 
@@ -171,9 +172,13 @@ void BasicComponent::setStyle(JSContext* ctx, JSValue& obj, std::vector<std::str
         std::string key = keys[i];
 
         if (StyleManager::styles.count(key) > 0) {
-            CompSetStyle* func = StyleManager::styles.at(key);
+            const StyleEntryWrapper& wrapper = StyleManager::styles.at(key);
             JSValue value = JS_GetPropertyStr(ctx, obj, key.c_str());
-            func(this->instance, style, ctx, value);
+            if (wrapper.type == StyleEntryType::SIMPLE) {
+                ApplySimpleStyle(this->instance, style, ctx, value, wrapper.entry.simple);
+            } else {
+                wrapper.entry.complex(this->instance, style, ctx, value);
+            }
             JS_FreeValue(ctx, value);
         }
     }
