@@ -138,9 +138,9 @@ void BasicComponent::setTransition (JSContext* ctx, JSValue obj, lv_style_t* sty
 
 bool BasicComponent::ensureStyle (int32_t type) {
     lv_style_t* style;
-    bool is_new;
+    bool is_new = false;
     if (this->style_map.find(type) != this->style_map.end()) {
-        
+        // style already exists
     } else {
         style = static_cast<lv_style_t*>(style_pool.allocate());
         style_map[type] = style;
