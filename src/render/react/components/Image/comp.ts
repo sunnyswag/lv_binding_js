@@ -4,6 +4,7 @@ import { setComponentProps, CommonProps } from "../common/index";
 import {
   EVENTTYPE_MAP,
   handleEvent,
+  setStyle,
   styleGetterProp,
 } from "../config";
 import path from 'tjs:path';

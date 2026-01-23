@@ -2,6 +2,7 @@ import { setComponentProps, CommonProps, OnClickEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
   handleEvent,
+  setStyle,
   styleGetterProp,
 } from "../config";
 import CanvasContext from "./context";
@@ -24,7 +25,8 @@ const canvasSetters = {
 export class CanvasComp extends NativeButton {
   uid: string;
   style: any;
-  
+  ctx: CanvasContext = null;
+
   constructor({ uid }) {
     super({ uid });
     this.uid = uid;

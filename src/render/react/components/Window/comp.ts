@@ -1,6 +1,7 @@
 import { setComponentProps, CommonProps } from "../common/index";
 import {
   styleGetterProp,
+  setStyle,
 } from "../config";
 
 const bridge = globalThis[Symbol.for('lvgljs')];

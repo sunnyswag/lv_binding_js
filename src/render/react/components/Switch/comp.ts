@@ -65,7 +65,7 @@ export class SwitchComp extends NativeComp {
     setComponentProps(this, "Switch", newProps, oldProps, switchSetters);
   }
   insertBefore(child, beforeChild) {
-    this.insertChildBefore(child, beforeChild);
+    super.insertChildBefore(child, beforeChild);
   }
   appendInitialChild(child) {
     this.appendChild(child);
