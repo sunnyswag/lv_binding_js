@@ -89,22 +89,22 @@ export const commonSetters = {
       oldStyleSheet: oldProps.style,
     });
   },
-  align(comp, { type, pos = [0, 0] }, newProps, oldProps) {
+  align(comp, { type, pos = [0, 0] }, oldProps) {
     if (
       !type ||
       (type === oldProps.align?.type &&
-        newProps.align?.pos?.[0] === oldProps.align?.pos?.[0] &&
-        newProps.align?.pos?.[1] === oldProps.align?.pos?.[1])
+        pos?.[0] === oldProps.align?.pos?.[0] &&
+        pos?.[1] === oldProps.align?.pos?.[1])
     )
       return;
     comp.align(type, pos);
   },
-  alignTo(comp, { type, pos = [0, 0], parent }, newProps, oldProps) {
+  alignTo(comp, { type, pos = [0, 0], parent }, oldProps) {
     if (
       !type ||
       (type === oldProps.alignTo?.type &&
-        newProps.alignTo?.pos?.[0] === oldProps.alignTo?.pos?.[0] &&
-        newProps.alignTo?.pos?.[1] === oldProps.alignTo?.pos?.[1] &&
+        pos?.[0] === oldProps.alignTo?.pos?.[0] &&
+        pos?.[1] === oldProps.alignTo?.pos?.[1] &&
         parent?.uid === oldProps.alignTo?.parent?.uid)
     )
       return;
