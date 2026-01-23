@@ -1,5 +1,5 @@
 import { StyleProps } from "../../core/style";
-import { setComponentProps, CommonProps } from "../common/index";
+import { setComponentProps, CommonProps, reorderProps } from "../common/index";
 import { STYLE_TYPE, setStyle, styleGetterProp } from "../config";
 
 const bridge = globalThis[Symbol.for('lvgljs')];
@@ -8,7 +8,6 @@ const NativeProgressBar = bridge.NativeRender.NativeComponents.ProgressBar;
 export type ProgressBarProps = CommonProps & {
   value: number;
   range: number[];
-  animationTime?: number;
   useAnimation?: boolean;
   indicatorStyle?: StyleProps;
 };
@@ -28,11 +27,18 @@ const progressBarSetters = {
       comp.setRange(arr[0], arr[1]);
     }
   },
+  value(comp, value) {
+    comp.setValue(value, comp.useAnimation);
+  },
+  useAnimation(comp, useAnimation: boolean) {
+    comp.useAnimation = useAnimation;
+  },
 };
 
 export class ProgressBarComp extends NativeProgressBar {
   uid: string;
   style: any;
+  useAnimation: boolean = false;
   
   constructor({ uid }) {
     super({ uid });
@@ -50,27 +56,7 @@ export class ProgressBarComp extends NativeProgressBar {
     });
   }
   setProps(newProps: ProgressBarProps, oldProps: ProgressBarProps) {
-    const customSetters = {
-      ...progressBarSetters,
-      style(comp, styleSheet, compName, oldProps) {
-        if (newProps.animationTime) {
-          styleSheet["style-transition-time"] = newProps.animationTime;
-        }
-        setStyle({
-          comp,
-          styleSheet,
-          compName: "ProgressBar",
-          styleType: STYLE_TYPE.PART_MAIN,
-          oldStyleSheet: oldProps.style,
-        });
-      },
-      value(comp, value, oldProps) {
-        if (value !== oldProps.value) {
-          comp.setValue(value, !!newProps.useAnimation);
-        }
-      },
-    };
-    setComponentProps(this, "ProgressBar", newProps, oldProps, customSetters);
+    setComponentProps(this, "ProgressBar", reorderProps<ProgressBarProps>(newProps, "useAnimation"), oldProps, progressBarSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "ProgressBar";

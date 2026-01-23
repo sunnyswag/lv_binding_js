@@ -1,5 +1,5 @@
 import { StyleProps } from "../../core/style";
-import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
+import { setComponentProps, CommonProps, OnChangeEvent, reorderProps } from "../common/index";
 import {
   EVENTTYPE_MAP,
   STYLE_TYPE,
@@ -33,7 +33,7 @@ const rollerSetters = {
   },
   options(comp, options, oldProps, newProps) {
     if (options !== oldProps.options && Array.isArray(options)) {
-      comp.setOptions(options, options.length, !!newProps.infinity);
+      comp.setOptions(options, options.length, comp.infinity);
     }
   },
   selectIndex(comp, selectIndex, oldProps) {
@@ -49,11 +49,15 @@ const rollerSetters = {
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
   },
+  infinity(comp, infinity: boolean) {
+    comp.infinity = infinity;
+  },
 };
 
 export class RollerComp extends NativeRoller {
   uid: string;
   style: any;
+  infinity: boolean = false;
   
   constructor({ uid }) {
     super({ uid });
@@ -71,13 +75,7 @@ export class RollerComp extends NativeRoller {
     });
   }
   setProps(newProps: RollerProps, oldProps: RollerProps) {
-    const customSetters = {
-      ...rollerSetters,
-      options(comp, options, oldProps) {
-        rollerSetters.options(comp, options, oldProps, newProps);
-      },
-    };
-    setComponentProps(this, "Roller", newProps, oldProps, customSetters);
+    setComponentProps(this, "Roller", reorderProps<RollerProps>(newProps, "infinity"), oldProps, rollerSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Roller";

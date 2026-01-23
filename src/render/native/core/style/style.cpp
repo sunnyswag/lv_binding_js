@@ -477,7 +477,7 @@ std::unordered_map<std::string, StyleEntryWrapper> StyleManager::styles {
     {"chart-scaleY",    StyleEntryWrapper(&CompSetChartScaleY)},
     {"transform-width", StyleEntryWrapper({LV_STYLE_TRANSFORM_WIDTH, StyleValueType::NUM})},
     {"transform-height", StyleEntryWrapper({LV_STYLE_TRANSFORM_HEIGHT, StyleValueType::NUM})},
-    {"style-transition-time", StyleEntryWrapper({LV_STYLE_ANIM_TIME, StyleValueType::NUM})},
+    {"transition-time", StyleEntryWrapper({LV_STYLE_ANIM_TIME, StyleValueType::NUM})},
     
     {"text-color",      StyleEntryWrapper({LV_STYLE_TEXT_COLOR,   StyleValueType::COLOR})},
     {"recolor",         StyleEntryWrapper({LV_STYLE_IMG_RECOLOR,  StyleValueType::COLOR})},

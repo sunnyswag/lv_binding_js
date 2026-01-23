@@ -5,7 +5,6 @@ import {
   STYLE_TYPE,
   handleEvent,
   setStyle,
-  styleGetterProp,
 } from "../config";
 import { StyleProps } from "../../core/style";
 
@@ -218,3 +217,11 @@ export function setComponentProps(
   }
 }
 
+export function reorderProps<T extends object>(props: T, priorityKey: keyof T & string): T {
+  if (props && priorityKey in props) {
+    const { [priorityKey]: priorityValue, ...rest } = props;
+    return { [priorityKey]: priorityValue, ...rest } as T;
+  }
+
+  return props;
+}
