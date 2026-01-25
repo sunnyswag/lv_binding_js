@@ -9,7 +9,7 @@ export default class RollerConfig implements LvgljsComponentConfig<RollerProps, 
   }
   createInstance(newProps: RollerProps, rootInstance, context, workInProgress, uid) {
     const instance = new RollerComp({ uid });
-    instance.setProps(newProps, {});
+    instance.setProps(newProps, {} as RollerProps);
     return instance;
   }
   commitMount(instance, newProps: RollerProps, internalInstanceHandle) {}

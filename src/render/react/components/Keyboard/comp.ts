@@ -1,6 +1,5 @@
 import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps } from "../common/index";
-import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import {
   EVENTTYPE_MAP,
   handleEvent,

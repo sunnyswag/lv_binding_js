@@ -8,7 +8,7 @@ export default class WindowConfig implements LvgljsComponentConfig<WindowProps, 
   }
   createInstance(newProps: WindowProps, rootInstance, context, workInProgress, uid) {
     const instance = new Window({ uid });
-    instance.setProps(newProps, {});
+    instance.setProps(newProps, {} as WindowProps);
     return instance;
   }
   commitMount(instance, props: WindowProps, internalInstanceHandle) {}

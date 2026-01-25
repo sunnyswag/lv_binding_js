@@ -9,7 +9,7 @@ export default class ProgressBarConfig implements LvgljsComponentConfig<Progress
   }
   createInstance(newProps: ProgressBarProps, rootInstance, context, workInProgress, uid) {
     const instance = new ProgressBarComp({ uid });
-    instance.setProps(newProps, {});
+    instance.setProps(newProps, {} as ProgressBarProps);
     return instance;
   }
   commitMount(instance, newProps: ProgressBarProps, internalInstanceHandle) {}
