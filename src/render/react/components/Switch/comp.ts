@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
@@ -31,14 +32,11 @@ const switchSetters = {
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
   },
-  checked(comp, val, oldProps) {
-    if (val === oldProps.checked) return;
+  checked(comp, val) {
     comp.setChecked(val);
   },
-  disabled(comp, val, oldProps) {
-    if (val !== oldProps.disabled) {
-      comp.setDisabled(val);
-    }
+  disabled(comp, val) {
+    comp.setDisabled(val);
   },
 };
 
@@ -61,8 +59,8 @@ export class SwitchComp extends NativeComp {
       },
     });
   }
-  setProps(newProps, oldProps) {
-    setComponentProps(this, "Switch", newProps, oldProps, switchSetters);
+  setProps(updatePayload: UpdatePayload<SwitchProps>, oldProps: SwitchProps) {
+    setComponentProps(this, "Switch", updatePayload, oldProps, switchSetters);
   }
   insertBefore(child, beforeChild) {
     super.insertChildBefore(child, beforeChild);

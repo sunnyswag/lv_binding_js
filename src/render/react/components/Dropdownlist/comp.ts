@@ -1,9 +1,11 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EDropdownListArrowDirection,
   EDropdownlistDirection,
   EVENTTYPE_MAP,
   handleEvent,
+  setStyle,
   styleGetterProp,
 } from "../config";
 
@@ -22,35 +24,23 @@ export type DropdownListProps = CommonProps & {
 };
 
 const dropdownlistSetters = {
-  items(comp, items, oldProps) {
-    if (items !== oldProps.items && Array.isArray(items)) {
-      comp.setItems(items, items.length);
-    }
+  items(comp, items) {
+    comp.setItems(items, items.length);
   },
-  arrow(comp, arrow, oldProps) {
-    if (arrow != oldProps.arrow && typeof arrow === "number") {
-      comp.setArrowDir(arrow);
-    }
+  arrow(comp, arrow) {
+    comp.setArrowDir(arrow);
   },
-  selectIndex(comp, selectIndex, oldProps) {
-    if (selectIndex !== oldProps.selectIndex) {
-      comp.setselectIndex(selectIndex);
-    }
+  selectIndex(comp, selectIndex) {
+    comp.setselectIndex(selectIndex);
   },
-  text(comp, text, oldProps) {
-    if (text !== oldProps.text) {
-      comp.setText(text);
-    }
+  text(comp, text) {
+    comp.setText(text);
   },
-  direction(comp, direction, oldProps) {
-    if (direction !== oldProps.direction) {
-      comp.setDir(direction);
-    }
+  direction(comp, direction) {
+    comp.setDir(direction);
   },
-  highlightSelect(comp, payload, oldProps) {
-    if (payload != oldProps.highlightSelect) {
-      comp.setHighLightSelect(payload);
-    }
+  highlightSelect(comp, payload) {
+    comp.setHighLightSelect(payload);
   },
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
@@ -76,8 +66,8 @@ export class DropdownlistComp extends NativeDropdownlist {
       },
     });
   }
-  setProps(newProps: DropdownListProps, oldProps: DropdownListProps) {
-    setComponentProps(this, "Dropdownlist", newProps, oldProps, dropdownlistSetters);
+  setProps(updatePayload: UpdatePayload<DropdownListProps>, oldProps: DropdownListProps) {
+    setComponentProps(this, "Dropdownlist", updatePayload, oldProps, dropdownlistSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Dropdownlist";

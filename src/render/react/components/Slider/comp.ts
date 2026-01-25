@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
@@ -71,16 +72,11 @@ const sliderSetters = {
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
   },
-  range(comp, arr, oldProps) {
-    if (!Array.isArray(arr)) return;
+  range(comp, arr) {
     const [min, max] = arr;
-    if (min === oldProps.range?.[0] && max === oldProps.range?.[1]) return;
-    if (isNaN(min) || isNaN(max)) return;
     comp.setRange([min, max]);
   },
-  value(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.value) return;
+  value(comp, val) {
     comp.setValue(val);
   },
 };
@@ -104,8 +100,8 @@ export class SliderComp extends NativeSlider {
       },
     });
   }
-  setProps(newProps: SliderProps, oldProps: SliderProps) {
-    setComponentProps(this, "Slider", newProps, oldProps, sliderSetters);
+  setProps(updatePayload: UpdatePayload<SliderProps>, oldProps: SliderProps) {
+    setComponentProps(this, "Slider", updatePayload, oldProps, sliderSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Slider";

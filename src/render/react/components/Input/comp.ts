@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
@@ -34,21 +35,13 @@ export type InputProps = CommonProps & {
 };
 
 const inputSetters = {
-  placeholder(comp, str, oldProps) {
-    if (str !== oldProps.placeholder) {
-      comp.setPlaceHolder(str);
-    }
+  placeholder(comp, str) {
+    comp.setPlaceHolder(str);
   },
-  mode(comp, mode, oldProps) {
-    if (mode == oldProps.mode) return;
-    if (mode === "password") {
-      comp.setPasswordMode(true);
-    } else if (oldProps.mode === "password") {
-      comp.setPasswordMode(false);
-    }
+  mode(comp, mode) {
+    comp.setPasswordMode(!!(mode === "password"));
   },
-  maxlength(comp, len, oldProps) {
-    if (len === oldProps.maxlength) return;
+  maxlength(comp, len) {
     comp.setMaxLength(len);
   },
   onChange(comp, fn) {
@@ -69,15 +62,11 @@ const inputSetters = {
       styleSheet,
     });
   },
-  value(comp, str, oldProps) {
-    if (str !== oldProps.value) {
-      comp.setText(str);
-    }
+  value(comp, str) {
+    comp.setText(str);
   },
-  autoKeyBoard(comp, payload, oldProps) {
-    if (payload !== oldProps?.autoKeyBoard) {
-      comp.setAutoKeyboard(payload);
-    }
+  autoKeyBoard(comp, payload) {
+    comp.setAutoKeyboard(payload);
   },
 };
 
@@ -103,8 +92,8 @@ export class InputComp extends NativeView {
       },
     });
   }
-  setProps(newProps: InputProps, oldProps: InputProps) {
-    setComponentProps(this, "Input", newProps, oldProps, inputSetters);
+  setProps(updatePayload: UpdatePayload<InputProps>, oldProps: InputProps) {
+    setComponentProps(this, "Input", updatePayload, oldProps, inputSetters);
   }
   insertBefore(child, beforeChild) {}
   appendInitialChild(child) {}

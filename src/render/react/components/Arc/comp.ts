@@ -1,4 +1,5 @@
 import { StyleProps } from "../../core/style";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
@@ -84,51 +85,32 @@ const arcSetters = {
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
   },
-  range(comp, arr, oldProps) {
-    if (!Array.isArray(arr)) return;
+  range(comp, arr) {
     const [min, max] = arr;
-    if (min === oldProps.range?.[0] && max === oldProps.range?.[1]) return;
-    if (isNaN(min) || isNaN(max)) return;
     comp.setRange([min, max]);
   },
-  value(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.value) return;
+  value(comp, val) {
     comp.setValue(val);
   },
-  startAngle(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.startAngle) return;
+  startAngle(comp, val) {
     comp.setStartAngle(val);
   },
-  endAngle(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.endAngle) return;
+  endAngle(comp, val) {
     comp.setEndAngle(val);
   },
-  backgroundStartAngle(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.backgroundStartAngle) return;
+  backgroundStartAngle(comp, val) {
     comp.setBackgroundStartAngle(val);
   },
-  backgroundEndAngle(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.backgroundEndAngle) return;
+  backgroundEndAngle(comp, val) {
     comp.setBackgroundEndAngle(val);
   },
-  rotation(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.rotation) return;
+  rotation(comp, val) {
     comp.setRotation(val);
   },
-  mode(comp, val, oldProps) {
-    if (val !== oldProps.mode && typeof modes[val] !== "undefined") {
-      comp.setMode(modes[val]);
-    }
+  mode(comp, val) {
+    comp.setMode(modes[val]);
   },
-  changeRate(comp, val, oldProps) {
-    if (isNaN(val)) return;
-    if (val == oldProps.changeRate) return;
+  changeRate(comp, val) {
     comp.setChangeRate(val);
   },
 };
@@ -152,8 +134,8 @@ export class ArcComp extends NativeArc {
       },
     });
   }
-  setProps(newProps: ArcProps, oldProps: ArcProps) {
-    setComponentProps(this, "Arc", newProps, oldProps, arcSetters);
+  setProps(updatePayload: UpdatePayload<ArcProps>, oldProps: ArcProps) {
+    setComponentProps(this, "Arc", updatePayload, oldProps, arcSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Arc";

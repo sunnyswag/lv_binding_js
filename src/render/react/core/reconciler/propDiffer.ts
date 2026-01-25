@@ -23,28 +23,56 @@ export function diffProps<Props extends Record<string, any>>(
   return Object.keys(updatePayload).length > 0 ? updatePayload : null;
 }
 
-function hasChanged(oldValue: any, newValue: any): boolean {
+function commonPreCheckChanged(oldValue: any, newValue: any): boolean | null {
   if (Object.is(oldValue, newValue) || (oldValue == null && newValue == null)) {
     return false;
   }
 
-  if ((oldValue == null || newValue == null) || (typeof oldValue !== typeof newValue))  {
+  if ((oldValue == null && newValue !== null) || (oldValue !== null && newValue == null)) {
     return true;
   }
   
-  if (typeof oldValue === 'function') {
-    return oldValue !== newValue;
+  if (typeof oldValue === 'function' && typeof newValue === 'function') {
+    return false;
   }
   
+  if (typeof oldValue !== typeof newValue) {
+    return true;
+  }
+
+  return null;
+}
+
+function hasChanged(oldValue: any, newValue: any): boolean {
+  const preCheck = commonPreCheckChanged(oldValue, newValue);
+  if (typeof preCheck === 'boolean') return preCheck;
+
   if (Array.isArray(oldValue) && Array.isArray(newValue)) {
     return hasArrayChanged(oldValue, newValue);
   }
   
-  if (typeof oldValue === 'object') {
+  if (typeof oldValue === 'object' && typeof newValue === 'object') {
     return hasObjectChanged(oldValue, newValue);
   }
   
-  return true;
+  return oldValue !== newValue;
+}
+
+function hasItemChanged(oldValue: any, newValue: any): boolean {
+  const preCheck = commonPreCheckChanged(oldValue, newValue);
+  if (typeof preCheck === 'boolean') return preCheck;
+  
+  if (typeof oldValue === 'object' && typeof newValue === 'object') {
+    if (Array.isArray(oldValue) && Array.isArray(newValue)) {
+      return hasArrayChanged(oldValue, newValue);
+    } else if (!Array.isArray(oldValue) && !Array.isArray(newValue)) {
+      return hasObjectChanged(oldValue, newValue);
+    } else {
+      return true;
+    }
+  }
+  
+  return oldValue !== newValue;
 }
 
 function hasArrayChanged(oldArray: any[], newArray: any[]): boolean {
@@ -53,7 +81,7 @@ function hasArrayChanged(oldArray: any[], newArray: any[]): boolean {
   }
   
   for (let i = 0; i < oldArray.length; i++) {
-    if (!Object.is(oldArray[i], newArray[i])) {
+    if (hasItemChanged(oldArray[i], newArray[i])) {
       return true;
     }
   }
@@ -74,7 +102,7 @@ function hasObjectChanged(oldObj: Record<string, any>, newObj: Record<string, an
       return true;
     }
     
-    if (!Object.is(oldObj[key], newObj[key])) {
+    if (hasItemChanged(oldObj[key], newObj[key])) {
       return true;
     }
   }

@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
@@ -27,17 +28,11 @@ export type TextAreaProps = CommonProps & {
 };
 
 const textareaSetters = {
-  placeholder(comp, str, oldProps) {
-    if (str !== oldProps.placeholder) {
-      comp.setPlaceHolder(str);
-    }
+  placeholder(comp, str) {
+    comp.setPlaceHolder(str);
   },
-  mode(comp, mode, oldProps) {
-    if (mode === "password") {
-      comp.setPasswordMode(true);
-    } else if (oldProps.mode === "password") {
-      comp.setPasswordMode(false);
-    }
+  mode(comp, mode) {
+    comp.setPasswordMode(!!(mode === "password"));
   },
   onFocusStyle(comp, styleSheet, oldProps) {
     setStyle({
@@ -54,15 +49,11 @@ const textareaSetters = {
   onFocus(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_FOCUSED);
   },
-  value(comp, str, oldProps) {
-    if (str !== oldProps.value) {
-      comp.setText(str);
-    }
+  value(comp, str) {
+    comp.setText(str);
   },
-  autoKeyBoard(comp, payload, oldProps) {
-    if (payload !== oldProps?.autoKeyBoard) {
-      comp.setAutoKeyboard(payload);
-    }
+  autoKeyBoard(comp, payload) {
+    comp.setAutoKeyboard(payload);
   },
 };
 
@@ -87,8 +78,8 @@ export class TextareaComp extends NativeView {
       },
     });
   }
-  setProps(newProps: TextAreaProps, oldProps: TextAreaProps) {
-    setComponentProps(this, "Textarea", newProps, oldProps, textareaSetters);
+  setProps(updatePayload: UpdatePayload<TextAreaProps>, oldProps: TextAreaProps) {
+    setComponentProps(this, "Textarea", updatePayload, oldProps, textareaSetters);
   }
   insertBefore(child, beforeChild) {}
   appendInitialChild(child) {}

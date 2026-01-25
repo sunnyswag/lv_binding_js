@@ -1,5 +1,6 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
-import { setComponentProps, CommonProps, reorderProps } from "../common/index";
+import { setComponentProps, CommonProps } from "../common/index";
 import { STYLE_TYPE, setStyle, styleGetterProp } from "../config";
 
 const bridge = globalThis[Symbol.for('lvgljs')];
@@ -22,10 +23,8 @@ const progressBarSetters = {
       oldStyleSheet: oldProps.indicatorStyle,
     });
   },
-  range(comp, arr, oldProps) {
-    if (arr?.[0] !== oldProps.range?.[0] || arr?.[1] !== oldProps.range?.[1]) {
-      comp.setRange(arr[0], arr[1]);
-    }
+  range(comp, arr) {
+    comp.setRange(arr[0], arr[1]);
   },
   value(comp, value) {
     comp.setValue(value, comp.useAnimation);
@@ -55,8 +54,8 @@ export class ProgressBarComp extends NativeProgressBar {
       },
     });
   }
-  setProps(newProps: ProgressBarProps, oldProps: ProgressBarProps) {
-    setComponentProps(this, "ProgressBar", reorderProps<ProgressBarProps>(newProps, "useAnimation"), oldProps, progressBarSetters);
+  setProps(updatePayload: UpdatePayload<ProgressBarProps>, oldProps: ProgressBarProps) {
+    setComponentProps(this, "ProgressBar", updatePayload, oldProps, progressBarSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "ProgressBar";

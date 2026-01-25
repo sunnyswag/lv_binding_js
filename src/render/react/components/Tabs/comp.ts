@@ -1,4 +1,5 @@
 import { setComponentProps, CommonProps } from "../common/index";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import {
   EVENTTYPE_MAP,
   handleEvent,
@@ -57,9 +58,11 @@ export class TabsComp extends NativeTabs {
     });
     this.currentAppendIndex = 0;
   }
-  setProps(newProps: TabsProps, oldProps: TabsProps) {
-    this.tabs = newProps.tabs;
-    setComponentProps(this, "Tabs", newProps, oldProps, tabsSetters);
+  setProps(updatePayload: UpdatePayload<TabsProps>, oldProps: TabsProps) {
+    if (updatePayload?.tabs) {
+      this.tabs = updatePayload.tabs;
+    }
+    setComponentProps(this, "Tabs", updatePayload, oldProps, tabsSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Tabs";

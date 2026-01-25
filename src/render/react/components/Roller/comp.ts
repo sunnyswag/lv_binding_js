@@ -1,5 +1,6 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
-import { setComponentProps, CommonProps, OnChangeEvent, reorderProps } from "../common/index";
+import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
   STYLE_TYPE,
@@ -31,20 +32,14 @@ const rollerSetters = {
       oldStyleSheet: oldProps.selectedStyle,
     });
   },
-  options(comp, options, oldProps, newProps) {
-    if (options !== oldProps.options && Array.isArray(options)) {
-      comp.setOptions(options, options.length, comp.infinity);
-    }
+  options(comp, options) {
+    comp.setOptions(options, options.length, comp.infinity);
   },
-  selectIndex(comp, selectIndex, oldProps) {
-    if (selectIndex !== oldProps.selectIndex) {
-      comp.setSelectIndex(selectIndex);
-    }
+  selectIndex(comp, selectIndex) {
+    comp.setSelectIndex(selectIndex);
   },
-  visibleRowCount(comp, count, oldProps) {
-    if (count !== oldProps.visibleRowCount) {
-      comp.setVisibleRowCount(count);
-    }
+  visibleRowCount(comp, count) {
+    comp.setVisibleRowCount(count);
   },
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
@@ -74,8 +69,8 @@ export class RollerComp extends NativeRoller {
       },
     });
   }
-  setProps(newProps: RollerProps, oldProps: RollerProps) {
-    setComponentProps(this, "Roller", reorderProps<RollerProps>(newProps, "infinity"), oldProps, rollerSetters);
+  setProps(updatePayload: UpdatePayload<RollerProps>, oldProps: RollerProps) {
+    setComponentProps(this, "Roller", updatePayload, oldProps, rollerSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Roller";

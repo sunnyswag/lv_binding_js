@@ -13,7 +13,7 @@ export default class WindowConfig implements LvgljsComponentConfig<WindowProps, 
   }
   commitMount(instance, props: WindowProps, internalInstanceHandle) {}
   commitUpdate(instance, updatePayload, oldProps: WindowProps, newProps: WindowProps, finishedWork) {
-    instance.setProps(newProps, oldProps);
+    instance.setProps(updatePayload, oldProps);
   }
   setProps(newProps: WindowProps, oldProps: WindowProps) {}
   insertBefore(child, beforeChild) {}

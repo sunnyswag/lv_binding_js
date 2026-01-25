@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
@@ -22,20 +23,14 @@ export type CheckboxProps = CommonProps & {
 };
 
 const checkboxSetters = {
-  checked(comp, val, oldProps) {
-    if (val !== oldProps.checked) {
-      comp.setChecked(val);
-    }
+  checked(comp, val) {
+    comp.setChecked(val);
   },
-  disabled(comp, val, oldProps) {
-    if (val !== oldProps.disabled) {
-      comp.setDisabled(val);
-    }
+  disabled(comp, val) {
+    comp.setDisabled(val);
   },
-  text(comp, val, oldProps) {
-    if (val !== oldProps.text) {
-      comp.setText(val);
-    }
+  text(comp, val) {
+    comp.setText(val);
   },
   checkedStyle(comp, styleSheet, oldProps) {
     setStyle({
@@ -88,8 +83,8 @@ export class CheckboxComp extends NativeView {
       },
     });
   }
-  setProps(newProps: CheckboxProps, oldProps: CheckboxProps) {
-    setComponentProps(this, "Checkbox", newProps, oldProps, checkboxSetters);
+  setProps(updatePayload: UpdatePayload<CheckboxProps>, oldProps: CheckboxProps) {
+    setComponentProps(this, "Checkbox", updatePayload, oldProps, checkboxSetters);
   }
   insertBefore(child, beforeChild) {
     super.insertChildBefore(child, beforeChild);

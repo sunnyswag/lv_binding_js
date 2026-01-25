@@ -1,4 +1,6 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps } from "../common/index";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import {
   EVENTTYPE_MAP,
   handleEvent,
@@ -31,15 +33,11 @@ export type KeyboardProps = CommonProps & {
 };
 
 const keyboardSetters = {
-  mode(comp, mode, oldProps) {
-    if (mode !== oldProps.mode && typeof modes[mode] !== "undefined") {
-      comp.setMode(modes[mode]);
-    }
+  mode(comp, mode) {
+    comp.setMode(modes[mode]);
   },
-  textarea(comp, textarea, oldProps) {
-    if (textarea?.uid !== oldProps.textarea?.uid) {
-      comp.setTextarea(textarea);
-    }
+  textarea(comp, textarea) {
+    comp.setTextarea(textarea);
   },
   onClose(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_CANCEL);
@@ -68,8 +66,8 @@ export class KeyboardComp extends NativeView {
       },
     });
   }
-  setProps(newProps: KeyboardProps, oldProps: KeyboardProps) {
-    setComponentProps(this, "Keyboard", newProps, oldProps, keyboardSetters);
+  setProps(updatePayload: UpdatePayload<KeyboardProps>, oldProps: KeyboardProps) {
+    setComponentProps(this, "Keyboard", updatePayload, oldProps, keyboardSetters);
   }
   insertBefore(child, beforeChild) {}
   appendInitialChild(child) {}

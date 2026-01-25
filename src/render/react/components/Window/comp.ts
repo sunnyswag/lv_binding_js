@@ -1,4 +1,5 @@
 import { setComponentProps, CommonProps } from "../common/index";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import {
   styleGetterProp,
   setStyle,
@@ -12,10 +13,8 @@ export type WindowProps = CommonProps & {
 };
 
 const windowSetters = {
-  title(comp, title, oldProps) {
-    if (oldProps.title != title) {
-      comp.setTitle(title);
-    }
+  title(comp, title) {
+    comp.setTitle(title);
   },
 };
 
@@ -38,8 +37,8 @@ export class Window extends NativeComp {
       },
     });
   }
-  setProps(newProps: WindowProps, oldProps: WindowProps) {
-    setComponentProps(this, "Window", newProps, oldProps, windowSetters);
+  setProps(updatePayload: UpdatePayload<WindowProps>, oldProps: WindowProps) {
+    setComponentProps(this, "Window", updatePayload, oldProps, windowSetters);
   }
   insertBefore(child, beforeChild) {}
   appendInitialChild(child) {

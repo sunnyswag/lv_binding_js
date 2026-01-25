@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { BUILT_IN_SYMBOL } from "../../core/style/symbol";
 import { isValidUrl, fetchBinary } from "../../utils/helpers";
 import { setComponentProps, CommonProps } from "../common/index";
@@ -21,8 +22,8 @@ const imageSetters = {
   onClick(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_CLICKED);
   },
-  src(comp, url, oldProps) {
-    if (url && url !== oldProps.src) {
+  src(comp, url) {
+    if (url) {
       if (BUILT_IN_SYMBOL[url]) {
         comp.setSymbol(BUILT_IN_SYMBOL[url]);
         return;
@@ -66,8 +67,8 @@ export class ImageComp extends NativeImage {
       },
     });
   }
-  setProps(newProps: ImageProps, oldProps: ImageProps) {
-    setComponentProps(this, "Image", newProps, oldProps, imageSetters);
+  setProps(updatePayload: UpdatePayload<ImageProps>, oldProps: ImageProps) {
+    setComponentProps(this, "Image", updatePayload, oldProps, imageSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Image";

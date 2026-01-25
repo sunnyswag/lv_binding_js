@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { colorTransform } from "../../core/style/color";
 import { setComponentProps, CommonProps } from "../common/index";
@@ -77,21 +78,14 @@ const chartSetters = {
       comp.setType(chartType[type]);
     }
   },
-  divLineCount(comp, arr, oldProps) {
-    if (
-      arr?.[0] !== oldProps?.divLineCount?.[0] ||
-      arr?.[1] !== oldProps?.divLineCount?.[1]
-    ) {
-      comp.setDivLineCount(arr);
-    }
+  divLineCount(comp, arr) {
+    comp.setDivLineCount(arr);
   },
-  pointNum(comp, num, oldProps) {
-    if (num !== oldProps?.pointNum) {
-      comp.setPointNum(num);
-    }
+  pointNum(comp, num) {
+    comp.setPointNum(num);
   },
-  scatterData(comp, data, oldProps) {
-    if (data !== oldProps?.scatterData) {
+  scatterData(comp, data) {
+    if (data) {
       data = data.map((item) => {
         const arr = [];
         item.data.forEach((item1) => {
@@ -106,22 +100,11 @@ const chartSetters = {
       comp.setScatterData(data);
     }
   },
-  leftAxisOption(comp, options, oldProps) {
-    if (
-      options.majorLen == void 0 ||
-      options.minorLen == void 0 ||
-      options.majorNum == void 0 ||
-      options.minorNum == void 0 ||
-      !options.drawSize
-    ) {
-      return;
-    }
-    if (options != oldProps?.leftAxisOption) {
-      comp.setLeftAxisOption(options);
-    }
+  leftAxisOption(comp, options) {
+    comp.setLeftAxisOption(options);
   },
-  leftAxisData(comp, data, oldProps) {
-    if (data !== oldProps?.leftAxisData) {
+  leftAxisData(comp, data) {
+    if (data) {
       data = data.map((item) => ({
         ...item,
         color: item.color === void 0 ? -1 : colorTransform(item.color),
@@ -129,22 +112,11 @@ const chartSetters = {
       comp.setLeftAxisData(data);
     }
   },
-  bottomAxisOption(comp, options, oldProps) {
-    if (
-      options.majorLen == void 0 ||
-      options.minorLen == void 0 ||
-      options.majorNum == void 0 ||
-      options.minorNum == void 0 ||
-      !options.drawSize
-    ) {
-      return;
-    }
-    if (options != oldProps?.bottomAxisOption) {
-      comp.setBottomAxisOption(options);
-    }
+  bottomAxisOption(comp, options) {
+    comp.setBottomAxisOption(options);
   },
-  bottomAxisData(comp, data, oldProps) {
-    if (data !== oldProps?.bottomAxisData) {
+  bottomAxisData(comp, data) {
+    if (data) {
       data = data.map((item) => ({
         ...item,
         color: item.color === void 0 ? -1 : colorTransform(item.color),
@@ -152,22 +124,11 @@ const chartSetters = {
       comp.setBottomAxisData(data);
     }
   },
-  rightAxisOption(comp, options, oldProps) {
-    if (
-      options.majorLen == void 0 ||
-      options.minorLen == void 0 ||
-      options.majorNum == void 0 ||
-      options.minorNum == void 0 ||
-      !options.drawSize
-    ) {
-      return;
-    }
-    if (options != oldProps?.rightAxisOption) {
-      comp.setRightAxisOption(options);
-    }
+  rightAxisOption(comp, options) {
+    comp.setRightAxisOption(options);
   },
-  rightAxisData(comp, data, oldProps) {
-    if (data !== oldProps?.rightAxisData) {
+  rightAxisData(comp, data) {
+    if (data) {
       data = data.map((item) => ({
         ...item,
         color: item.color === void 0 ? -1 : colorTransform(item.color),
@@ -175,22 +136,11 @@ const chartSetters = {
       comp.setRightAxisData(data);
     }
   },
-  topAxisOption(comp, options, oldProps) {
-    if (
-      options.majorLen == void 0 ||
-      options.minorLen == void 0 ||
-      options.majorNum == void 0 ||
-      options.minorNum == void 0 ||
-      !options.drawSize
-    ) {
-      return;
-    }
-    if (options != oldProps?.topAxisOption) {
-      comp.setTopAxisOption(options);
-    }
+  topAxisOption(comp, options) {
+    comp.setTopAxisOption(options);
   },
-  topAxisData(comp, data, oldProps) {
-    if (data !== oldProps?.topAxisData) {
+  topAxisData(comp, data) {
+    if (data) {
       data = data.map((item) => ({
         ...item,
         color: item.color === void 0 ? -1 : colorTransform(item.color),
@@ -198,57 +148,29 @@ const chartSetters = {
       comp.setTopAxisData(data);
     }
   },
-  leftAxisLabels(comp, arr, oldProps) {
-    if (arr !== oldProps?.leftAxisLabels) {
-      comp.setLeftAxisLabels(arr);
-    }
+  leftAxisLabels(comp, arr) {
+    comp.setLeftAxisLabels(arr);
   },
-  rightAxisLabels(comp, arr, oldProps) {
-    if (arr !== oldProps?.rightAxisLabels) {
-      comp.setRightAxisLabels(arr);
-    }
+  rightAxisLabels(comp, arr) {
+    comp.setRightAxisLabels(arr);
   },
-  topAxisLabels(comp, arr, oldProps) {
-    if (arr !== oldProps?.topAxisLabels) {
-      comp.setTopAxisLabels(arr);
-    }
+  topAxisLabels(comp, arr) {
+    comp.setTopAxisLabels(arr);
   },
-  bottomAxisLabels(comp, arr, oldProps) {
-    if (arr !== oldProps?.bottomAxisLabels) {
-      comp.setBottomAxisLabels(arr);
-    }
+  bottomAxisLabels(comp, arr) {
+    comp.setBottomAxisLabels(arr);
   },
-  leftAxisRange(comp, arr, oldProps) {
-    if (
-      arr?.[0] !== oldProps?.leftAxisRange?.[0] ||
-      arr?.[1] !== oldProps?.leftAxisRange?.[1]
-    ) {
-      comp.setLeftAxisRange(arr);
-    }
+  leftAxisRange(comp, arr) {
+    comp.setLeftAxisRange(arr);
   },
-  rightAxisRange(comp, arr, oldProps) {
-    if (
-      arr?.[0] !== oldProps?.rightAxisRange?.[0] ||
-      arr?.[1] !== oldProps?.rightAxisRange?.[1]
-    ) {
-      comp.setRightAxisRange(arr);
-    }
+  rightAxisRange(comp, arr) {
+    comp.setRightAxisRange(arr);
   },
-  topAxisRange(comp, arr, oldProps) {
-    if (
-      arr?.[0] !== oldProps?.topAxisRange?.[0] ||
-      arr?.[1] !== oldProps?.topAxisRange?.[1]
-    ) {
-      comp.setTopAxisRange(arr);
-    }
+  topAxisRange(comp, arr) {
+    comp.setTopAxisRange(arr);
   },
-  bottomAxisRange(comp, arr, oldProps) {
-    if (
-      arr?.[0] !== oldProps?.bottomAxisRange?.[0] ||
-      arr?.[1] !== oldProps?.bottomAxisRange?.[1]
-    ) {
-      comp.setBottomAxisRange(arr);
-    }
+  bottomAxisRange(comp, arr) {
+    comp.setBottomAxisRange(arr);
   },
 };
 
@@ -271,8 +193,8 @@ export class ChartComp extends NativeChart {
       },
     });
   }
-  setProps(newProps: ChartProps, oldProps: ChartProps) {
-    setComponentProps(this, "Chart", newProps, oldProps, chartSetters);
+  setProps(updatePayload: UpdatePayload<ChartProps>, oldProps: ChartProps) {
+    setComponentProps(this, "Chart", updatePayload, oldProps, chartSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Chart";

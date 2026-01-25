@@ -14,7 +14,7 @@ export default class RollerConfig implements LvgljsComponentConfig<RollerProps, 
   }
   commitMount(instance, newProps: RollerProps, internalInstanceHandle) {}
   commitUpdate(instance, updatePayload, oldProps: RollerProps, newProps: RollerProps, finishedWork) {
-    instance.setProps(newProps, oldProps);
+    instance.setProps(updatePayload, oldProps);
   }
   setProps(newProps: RollerProps, oldProps: RollerProps) {}
   insertBefore(child, beforeChild) {}

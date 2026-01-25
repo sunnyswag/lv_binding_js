@@ -1,4 +1,5 @@
 import { setComponentProps, CommonProps, OnClickEvent } from "../common/index";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import {
   EVENTTYPE_MAP,
   handleEvent,
@@ -42,8 +43,8 @@ export class CanvasComp extends NativeButton {
       },
     });
   }
-  setProps(newProps: CanvasProps, oldProps: CanvasProps) {
-    setComponentProps(this, "Canvas", newProps, oldProps, canvasSetters);
+  setProps(updatePayload: UpdatePayload<CanvasProps>, oldProps: CanvasProps) {
+    setComponentProps(this, "Canvas", updatePayload, oldProps, canvasSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Canvas";

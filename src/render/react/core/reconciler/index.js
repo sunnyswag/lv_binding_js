@@ -167,6 +167,7 @@ const HostConfig = {
     newProps,
     finishedWork,
   ) {
+    console.log('updatePayload', updatePayload);
     const { commitUpdate } = getComponentByTagName(type);
     return commitUpdate(instance, updatePayload, oldProps, newProps, finishedWork);
   },

@@ -1,4 +1,5 @@
 import { StyleProps } from "../../core/style";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps, OnClickEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
@@ -74,8 +75,8 @@ export class MaskComp extends NativeMask {
       },
     });
   }
-  setProps(newProps: MaskProps, oldProps: MaskProps) {
-    setComponentProps(this, "Mask", newProps, oldProps, maskSetters);
+  setProps(updatePayload: UpdatePayload<MaskProps>, oldProps: MaskProps) {
+    setComponentProps(this, "Mask", updatePayload, oldProps, maskSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Mask";

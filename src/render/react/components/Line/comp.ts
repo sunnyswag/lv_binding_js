@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps } from "../common/index";
 import {
   styleGetterProp,
@@ -11,13 +12,8 @@ export type LineProps = CommonProps & {
 };
 
 const lineSetters = {
-  points(comp, points, oldProps) {
-    if (
-      (Array.isArray(points) && points !== oldProps?.points) ||
-      points?.length !== oldProps?.points?.length
-    ) {
-      comp.setPoints(points, points.length);
-    }
+  points(comp, points) {
+    comp.setPoints(points, points.length);
   },
 };
 
@@ -40,8 +36,8 @@ export class LineComp extends NativeLine {
       },
     });
   }
-  setProps(newProps: LineProps, oldProps: LineProps) {
-    setComponentProps(this, "Line", newProps, oldProps, lineSetters);
+  setProps(updatePayload: UpdatePayload<LineProps>, oldProps: LineProps) {
+    setComponentProps(this, "Line", updatePayload, oldProps, lineSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Line";

@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps, OnChangeEvent } from "../common/index";
 import {
   EVENTTYPE_MAP,
@@ -20,26 +21,20 @@ const calendarSetters = {
   onChange(comp, fn) {
     handleEvent(comp, fn, EVENTTYPE_MAP.EVENT_VALUE_CHANGED);
   },
-  today(comp, today, oldProps) {
-    if (today && today !== oldProps.today) {
-      const date = new Date(today);
-      comp.setToday(date.getFullYear(), date.getMonth() + 1, date.getDate());
-    }
+  today(comp, today) {
+    const date = new Date(today);
+    comp.setToday(date.getFullYear(), date.getMonth() + 1, date.getDate());
   },
-  shownMonth(comp, month, oldProps) {
-    if (month && month !== oldProps.shownMonth) {
-      const date = new Date(month);
-      comp.setShownMonth(date.getFullYear(), date.getMonth() + 1);
-    }
+  shownMonth(comp, month) {
+    const date = new Date(month);
+    comp.setShownMonth(date.getFullYear(), date.getMonth() + 1);
   },
-  highLightDates(comp, dates, oldProps) {
-    if (Array.isArray(dates) && dates !== oldProps.highLightDates) {
-      dates = dates.map((item) => {
-        const date = new Date(item);
-        return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
-      });
-      comp.setHighlightDates(dates, dates.length);
-    }
+  highLightDates(comp, dates) {
+    dates = dates.map((item) => {
+      const date = new Date(item);
+      return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+    });
+    comp.setHighlightDates(dates, dates.length);
   },
 };
 
@@ -62,8 +57,8 @@ export class CalendarComp extends NativeCalendar {
       },
     });
   }
-  setProps(newProps: CalendarProps, oldProps: CalendarProps) {
-    setComponentProps(this, "Calendar", newProps, oldProps, calendarSetters);
+  setProps(updatePayload: UpdatePayload<CalendarProps>, oldProps: CalendarProps) {
+    setComponentProps(this, "Calendar", updatePayload, oldProps, calendarSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Calendar";
