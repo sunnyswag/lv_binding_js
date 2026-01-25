@@ -2,6 +2,7 @@ import { getComponentByTagName } from "../../components/config";
 import { unRegistEvent } from "../event";
 import Reconciler from "react-reconciler";
 import { DefaultEventPriority } from "react-reconciler/constants";
+import { diffProps } from "./propDiffer.ts";
 
 let id = 1;
 
@@ -123,7 +124,8 @@ const HostConfig = {
     return true;
   },
   prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext) {
-    return true;
+    const skipKeys = type === 'Text' ? [] : ['children'];
+    return diffProps(oldProps, newProps, skipKeys);
   },
 
   // --- Mutation Methods ---
@@ -166,13 +168,7 @@ const HostConfig = {
     finishedWork,
   ) {
     const { commitUpdate } = getComponentByTagName(type);
-    return commitUpdate(
-      instance,
-      updatePayload,
-      oldProps,
-      newProps,
-      finishedWork,
-    );
+    return commitUpdate(instance, updatePayload, oldProps, newProps, finishedWork);
   },
   
   // --- Visibility Methods (for Suspense) ---

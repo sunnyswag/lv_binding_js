@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps } from "../common/index";
 import {
   setStyle,
@@ -30,8 +31,8 @@ export class ViewComp extends NativeView {
       },
     });
   }
-  setProps(newProps: ViewProps, oldProps: ViewProps) {
-    setComponentProps(this, "View", newProps, oldProps, viewSetters);
+  setProps(updatePayload: UpdatePayload<ViewProps>, oldProps: ViewProps) {
+    setComponentProps(this, "View", updatePayload, oldProps, viewSetters);
   }
   insertBefore(child, beforeChild) {
     super.insertChildBefore(child, beforeChild);

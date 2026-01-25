@@ -7,6 +7,7 @@ import {
   setStyle,
 } from "../config";
 import { StyleProps } from "../../core/style";
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 
 export type CommonProps = {
   style?: StyleProps;
@@ -187,32 +188,33 @@ export const commonSetters = {
 export function setComponentProps(
   comp: any,
   compName: string,
-  newProps: any,
-  oldProps: any,
+  updatePayload: UpdatePayload<CommonProps>,
+  oldProps: CommonProps,
   componentSetters: Record<string, Function>
 ) {
-  for (const key in newProps) {
+  if (!updatePayload) return;
+  
+  for (const key in updatePayload) {
+    const value = updatePayload[key];
     const setter = componentSetters[key] || commonSetters[key];
     if (!setter) continue;
     if (setter.length === 0) {
       setter();
     } else if (setter.length === 2) {
-      setter(comp, newProps[key]);
+      setter(comp, value);
     } else if (setter.length === 3) {
-      setter(comp, newProps[key], oldProps);
+      setter(comp, value, oldProps);
     } else if (setter.length === 4) {
-      setter(comp, newProps[key], compName, oldProps);
-    } else if (setter.length === 5) {
-      setter(comp, newProps[key], newProps, oldProps);
+      setter(comp, value, compName, oldProps);
     } else {
       setter();
     }
   }
   
   comp.dataset = {};
-  for (const prop in newProps) {
-    if (prop.indexOf("data-") === 0) {
-      comp.dataset[prop.substring(5)] = newProps[prop];
+  for (const key in updatePayload) {
+    if (key.indexOf("data-") === 0) {
+      comp.dataset[key.substring(5)] = updatePayload[key];
     }
   }
 }

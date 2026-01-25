@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { StyleProps } from "../../core/style";
 import { setComponentProps, CommonProps, OnClickEvent } from "../common/index";
 import {
@@ -74,8 +75,8 @@ export class ButtonComp extends NativeButton {
       },
     });
   }
-  setProps(newProps: ButtonProps, oldProps: ButtonProps) {
-    setComponentProps(this, "Button", newProps, oldProps, buttonSetters);
+  setProps(updatePayload: UpdatePayload<ButtonProps>, oldProps: ButtonProps) {
+    setComponentProps(this, "Button", updatePayload, oldProps, buttonSetters);
   }
   insertBefore(child, beforeChild) {}
   static tagName = "Button";

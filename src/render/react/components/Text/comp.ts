@@ -1,3 +1,4 @@
+import { UpdatePayload } from "../../core/reconciler/propDiffer";
 import { setComponentProps, CommonProps } from "../common/index";
 import {
   setStyle,
@@ -12,9 +13,9 @@ export type TextProps = CommonProps & {
 };
 
 const textSetters = {
-  children(comp, str, oldProps) {
+  children(comp: typeof NativeText, str: string | number | (string | number)[]) {
     const type = typeof str;
-    if ((type == "string" || type == "number") && oldProps.children !== str) {
+    if ((type == "string" || type == "number")) {
       comp.setText(String(str));
     } else if (Array.isArray(str)) {
       const isStringArr = str.every(
@@ -46,8 +47,8 @@ export class TextComp extends NativeText {
       },
     });
   }
-  setProps(newProps: TextProps, oldProps: TextProps) {
-    setComponentProps(this, "Text", newProps, oldProps, textSetters);
+  setProps(updatePayload: UpdatePayload<TextProps>, oldProps: TextProps) {
+    setComponentProps(this, "Text", updatePayload, oldProps, textSetters);
   }
   insertBefore(child, beforeChild) {}
   appendInitialChild(child) {}
