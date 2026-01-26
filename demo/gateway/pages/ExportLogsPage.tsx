@@ -13,7 +13,7 @@ export function ExportLogsPage() {
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
       <Header title={t("exportLogs.title")} />
 
-      <View style={style.content}>
+      <View style={style.content} addToFocusGroup>
         <View style={style.messageBox}>
           <Text style={style.messageText}>
             {t("exportLogs.title")}

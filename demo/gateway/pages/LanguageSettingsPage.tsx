@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Dimensions, Text, useT, View } from "lvgljs-ui";
+import { Dimensions, Image, Text, useI18n, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
@@ -8,12 +8,12 @@ const { width, height } = Dimensions.window;
 export function LanguageSettingsPage() {
   const t = useT();
   const navigate = useNavigate();
-  const [selectedLang, setSelectedLang] = useState("en");
+  const { locale, setLocale } = useI18n();
 
   const languages = [
-    { id: "zh", label: t("language.zh") },
-    { id: "en", label: t("language.en") },
-    { id: "ja", label: t("language.ja") },
+    { id: "zh", label: "简体中文" },
+    { id: "en", label: "English" },
+    { id: "ja", label: "日本語" },
   ];
 
   return (
@@ -28,15 +28,12 @@ export function LanguageSettingsPage() {
               autoFocus={index === 0}
               addToFocusGroup
               onFocusedStyle={style.focused}
-              style={[
-                style.langItem,
-                selectedLang === lang.id && style.langItemSelected,
-              ]}
-              onClick={() => setSelectedLang(lang.id)}
+              style={style.langItem}
+              onClick={() => setLocale(lang.id)}
             >
               <Text style={style.langText}>{lang.label}</Text>
-              {selectedLang === lang.id && (
-                <Text style={style.checkmark}>✓</Text>
+              {locale === lang.id && (
+                <Image src={"ok"} style={style.checkmark} />  
               )}
             </View>
           ))}

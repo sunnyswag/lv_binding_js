@@ -15,6 +15,7 @@ import { ClearLogsPage } from "./pages/ClearLogsPage";
 declare const require: any;
 const messages = (locale: string) => {
   if (locale === "en") return require("./i18n/en.json");
+  if (locale === "ja") return require("./i18n/ja.json");
   return require("./i18n/zh.json");
 };
 

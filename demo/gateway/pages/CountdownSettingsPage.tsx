@@ -26,7 +26,7 @@ export function CountdownSettingsPage() {
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
       <Header title={t("countdown.title")} />
 
-      <View style={style.centerContent}>
+      <View style={style.centerContent} addToFocusGroup>
         <Arc
           style={style.arc}
           indicatorStyle={style.arcIndicator}
@@ -64,6 +64,7 @@ const style: Record<string, any> = {
     width,
     height: height - 52,
     display: "flex",
+    "background-opacity": 0,
     "flex-direction": "column",
     "justify-content": "center",
     "align-items": "center",

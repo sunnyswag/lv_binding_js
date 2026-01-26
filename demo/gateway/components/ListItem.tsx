@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "lvgljs-ui";
+import { Image, Text, useT, View } from "lvgljs-ui";
 
 interface ListItemProps {
   title: string;
@@ -18,6 +18,7 @@ export function ListItem({
   onClick,
   autoFocus = false,
 }: ListItemProps) {
+  const t = useT();
   return (
     <View
       autoFocus={autoFocus}
@@ -27,7 +28,7 @@ export function ListItem({
       onClick={onClick}
     >
       <View style={style.content}>
-        <Text style={style.title}>{title}</Text>
+        <Text style={style.title}>{t(title)}</Text>
         {badge && (
           <View style={[style.badge, { "background-color": badgeColor }]}>
             <Text style={style.badgeText}>{badge}</Text>
@@ -35,7 +36,7 @@ export function ListItem({
         )}
       </View>
       {showArrow && (
-        <Text style={style.arrow}>→</Text>
+        <Image src={"right"} style={style.arrow} />
       )}
     </View>
   );
@@ -57,6 +58,9 @@ const style: Record<string, any> = {
   },
   content: {
     display: "flex",
+    width: 'auto',
+    height: 'auto',
+    "background-opacity": 0,
     "flex-direction": "row",
     "align-items": "center",
     "flex": 1,

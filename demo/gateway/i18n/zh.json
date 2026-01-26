@@ -1,49 +1,46 @@
 {
   "home": {
-    "title": "智慧网关"
+    "title": "Smart Gateway [zh]"
   },
   "header": {
-    "eventLog": "Event Log",
-    "deviceInfo": "Device Info",
-    "deviceStatus": "Device Status",
-    "settings": "Setting"
+    "eventLog": "Event Log [zh]",
+    "deviceInfo": "Device Info [zh]",
+    "deviceStatus": "Device Status [zh]",
+    "settings": "Setting [zh]"
   },
   "logs": {
-    "title": "Event Log",
-    "alerts": "Alerts",
-    "notification": "Notification",
-    "detail": "日志详情"
+    "title": "Event Log [zh]",
+    "alerts": "Alerts [zh]",
+    "notification": "Notification [zh]",
+    "detail": "Log Detail [zh]"
   },
   "deviceInfo": {
-    "title": "Device Info"
+    "title": "Device Info [zh]"
   },
   "deviceStatus": {
-    "title": "Device Status"
+    "title": "Device Status [zh]"
   },
   "settings": {
-    "title": "Setting",
-    "language": "Language",
-    "exportLogs": "Export Logs To Micro SD",
-    "clearLogs": "Clear Logs",
-    "countdown": "Countdown"
+    "title": "Setting [zh]",
+    "language": "Language [zh]",
+    "exportLogs": "Export Logs To Micro SD [zh]",
+    "clearLogs": "Clear Logs [zh]",
+    "countdown": "Countdown [zh]"
   },
   "language": {
-    "title": "Language",
-    "zh": "简体中文",
-    "en": "English",
-    "ja": "日本語"
+    "title": "Language [zh]"
   },
   "countdown": {
-    "title": "Countdown",
-    "time": "剩余{remain}秒"
+    "title": "Countdown [zh]",
+    "time": "{remain}s [zh]"
   },
   "exportLogs": {
-    "title": "Export Logs To Micro SD"
+    "title": "Export Logs To Micro SD [zh]"
   },
   "clearLogs": {
-    "title": "Clear Logs",
-    "confirm": "Confirm To Clear The Logs?",
-    "cancel": "取消",
-    "confirmBtn": "确认"
+    "title": "Clear Logs [zh]",
+    "confirm": "Confirm To Clear The Logs? [zh]",
+    "cancel": "Cancel [zh]",
+    "confirmBtn": "Confirm [zh]"
   }
 }

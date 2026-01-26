@@ -11,10 +11,10 @@ export function SettingsPage() {
   const navigate = useNavigate();
 
   const settingsItems = [
-    { id: "language", title: t("settings.language"), path: "/settings/language" },
-    { id: "exportLogs", title: t("settings.exportLogs"), path: "/settings/export-logs" },
-    { id: "clearLogs", title: t("settings.clearLogs"), path: "/settings/clear-logs" },
-    { id: "countdown", title: t("settings.countdown"), path: "/settings/countdown" },
+    { id: "language", title: "settings.language", path: "/settings/language" },
+    { id: "exportLogs", title: "settings.exportLogs", path: "/settings/export-logs" },
+    { id: "clearLogs", title: "settings.clearLogs", path: "/settings/clear-logs" },
+    { id: "countdown", title: "settings.countdown", path: "/settings/countdown" },
   ];
 
   return (
