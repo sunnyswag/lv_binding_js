@@ -24,21 +24,19 @@ export function DeviceStatusPage() {
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
       <Header title={t("deviceStatus.title")} backIcon={"./demo/gateway/assets/nav_icon/device_status.png"} />
 
-      <View style={style.content}>
-        <View style={style.scrollBox}>
-          {statusItems.map((item, index) => (
-            <View
-              key={item.label}
-              autoFocus={index === 0}
-              addToFocusGroup
-              onFocusedStyle={style.focused}
-              style={style.statusItem}
-            >
-              <Text style={style.value}>{item.value}</Text>
-              <Text style={style.label}>{item.label}</Text>
-            </View>
-          ))}
-        </View>
+      <View style={style.scrollBox}>
+        {statusItems.map((item, index) => (
+          <View
+            key={item.label}
+            autoFocus={index === 0}
+            addToFocusGroup
+            onFocusedStyle={style.focused}
+            style={style.statusItem}
+          >
+            <Text style={style.value}>{item.value}</Text>
+            <Text style={style.label}>{item.label}</Text>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -54,19 +52,11 @@ const style: Record<string, any> = {
     "flex-direction": "column",
     overflow: "hidden",
   },
-  content: {
-    width,
-    height: height - 52,
-    padding: 12,
-    display: "flex",
-    "flex-direction": "column",
-  },
   scrollBox: {
-    width: width - 24,
-    height: height - 52 - 24,
+    width: width,
+    height: height - 24,
     padding: 8,
     "background-color": "0x101010",
-    "border-radius": 10,
     overflow: 0,
     "overflow-scrolling": 1,
     display: "flex",
