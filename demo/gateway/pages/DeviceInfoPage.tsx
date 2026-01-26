@@ -5,40 +5,75 @@ import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
 
+interface DeviceInfoSectionProps {
+  title: string;
+  content: Array<string>;
+  autoFocus?: boolean;
+}
+
+function DeviceInfoSection({ title, content, autoFocus = false }: DeviceInfoSectionProps) {
+  return (
+    <View 
+     style={style.ethSection}
+     autoFocus={autoFocus}
+     addToFocusGroup
+     onFocusedStyle={style.ethSectionFocused}
+    >
+      <Text style={style.ethTitle}>{title}</Text>
+      <View style={style.ethContent}>
+        {content.map((item) => (
+          <Text style={style.value}>{item}</Text>
+        ))}
+      </View>
+    </View>
+  );
+}
+
 export function DeviceInfoPage() {
   const t = useT();
   const navigate = useNavigate();
 
-  const infoItems = useMemo(
-    () => [
-      { label: "Device Name", value: "AX100M" },
-      { label: "Firmware Version", value: "v1.2.3" },
-      { label: "MAC Address", value: "00:11:22:33:44:55" },
-      { label: "IP Address", value: "192.168.1.100" },
-      { label: "Serial Number", value: "SN123456789" },
-    ],
-    []
-  );
-
+  const eth1Items = useMemo(
+    () => [{
+      title: "ETH1",
+      content: [
+        "IP:192.168.1.100",
+        "MAC:00:11:22:33:44:55",
+        "Netmask:255.255.255.0",
+        "Gateway:192.168.1.1",
+      ]
+    },
+    {
+      title: "ETH2",
+      content: [
+        "IP:192.168.2.100",
+        "MAC:00:11:22:33:44:56",
+        "Netmask:255.255.255.0",
+        "Gateway:192.168.2.1",
+      ]
+    },
+    {
+      title: "Version",
+      content: [
+        "Firmware Version:1.0.0",
+        "Studio Version:1.0.0",
+      ]
+    }
+  ], []);
+  
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
       <Header title={t("deviceInfo.title")} backIcon={"./demo/gateway/assets/nav_icon/device_info.png"} />
 
-      <View style={style.content}>
-        <View style={style.scrollBox}>
-          {infoItems.map((item, index) => (
-            <View
-              key={item.label}
-              autoFocus={index === 0}
-              addToFocusGroup
-              onFocusedStyle={style.focused}
-              style={style.infoItem}
-            >
-              <Text style={style.label}>{item.label}</Text>
-              <Text style={style.value}>{item.value}</Text>
-            </View>
-          ))}
-        </View>
+      <View style={style.scrollBox}>
+        {eth1Items.map((item, index) => (
+          <DeviceInfoSection
+            key={item.title}
+            title={item.title}
+            content={item.content}
+            autoFocus={index === 0}
+          />
+        ))}
       </View>
     </View>
   );
@@ -54,46 +89,59 @@ const style: Record<string, any> = {
     "flex-direction": "column",
     overflow: "hidden",
   },
-  content: {
-    width,
-    height: height - 52,
-    padding: 12,
-    display: "flex",
-    "flex-direction": "column",
-  },
   scrollBox: {
-    width: width - 24,
-    height: height - 52 - 24,
-    padding: 8,
+    width: width,
+    height: height - 80,
+    padding: "16px",
     "background-color": "0x101010",
-    "border-radius": 10,
     overflow: 0,
     "overflow-scrolling": 1,
     display: "flex",
     "flex-direction": "column",
   },
+  ethSection: {
+    height: 'auto',
+    width: "100%",
+    "background-color": "0x2a2a2a",
+    display: "flex",
+    "flex-direction": "column",
+  },
+  ethTitle: {
+    "text-color": "white",
+    "font-size": 24,
+    "font-weight": "bold",
+  },
+  ethSectionFocused: {
+    "background-color": "#4660FF",
+  },
+  ethContent: {
+    width: "100%",
+    height: 'auto',
+    "background-opacity": 0,
+    display: "flex",
+    "flex-direction": "column",
+  },
   infoItem: {
     width: "100%",
-    height: 60,
-    "border-radius": 10,
-    "background-color": "0x2a2a2a",
+    height: 50,
+    "border-radius": 8,
+    "background-color": "0x1a1a1a",
     margin: "0 0 8px 0",
     padding: "0 16px",
     display: "flex",
     "flex-direction": "row",
     "align-items": "center",
     "justify-content": "space-between",
-    "scroll-on-focus": 1,
   },
   label: {
     "text-color": "0xb0b0b0",
     "font-size": 14,
+    "flex": 1,
   },
   value: {
     "text-color": "white",
     "font-size": 14,
-  },
-  focused: {
-    "background-color": "#4660FF",
+    "font-weight": "normal",
+    "text-align": "right",
   },
 };
