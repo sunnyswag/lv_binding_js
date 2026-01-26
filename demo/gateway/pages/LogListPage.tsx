@@ -17,7 +17,7 @@ export function LogListPage() {
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
-      <Header title={t("logs.title")} />
+      <Header title={t("logs.title")} backIcon={"./demo/gateway/assets/nav_icon/event_log.png"} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>

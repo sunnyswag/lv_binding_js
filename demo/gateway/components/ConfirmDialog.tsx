@@ -94,6 +94,6 @@ const style: Record<string, any> = {
   },
   buttonFocused: {
     "border-width": 3,
-    "border-color": "0x4267FF",
+    "border-color": "#4660FF",
   },
 };

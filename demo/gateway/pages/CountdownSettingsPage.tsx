@@ -78,7 +78,7 @@ const style: Record<string, any> = {
   },
   arcIndicator: {
     "arc-width": 18,
-    "arc-color": "0x4267FF",
+    "arc-color": "#4660FF",
     "arc-rounded": true,
   },
   arcKnobHidden: {

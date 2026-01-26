@@ -85,6 +85,6 @@ const style: Record<string, any> = {
     margin: "0 0 0 12px",
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
 };

@@ -22,7 +22,7 @@ export function DeviceInfoPage() {
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
-      <Header title={t("deviceInfo.title")} />
+      <Header title={t("deviceInfo.title")} backIcon={"./demo/gateway/assets/nav_icon/device_info.png"} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
@@ -94,6 +94,6 @@ const style: Record<string, any> = {
     "font-size": 14,
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
 };

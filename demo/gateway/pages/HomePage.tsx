@@ -1,67 +1,48 @@
 import React from "react";
-import { Button, Dimensions, Text, useT, View } from "lvgljs-ui";
+import { Button, Dimensions, Image, Text, useT, View } from "lvgljs-ui";
 import { useNavigate } from "react-router";
 
 const { width, height } = Dimensions.window;
 
+const colWidth = (width - 24 * 2 - 12) / 2;
+const rowHeight = (height - 80 - 24 * 2 - 12) / 2;
+
 export function HomePage() {
   const t = useT();
   const navigate = useNavigate();
-  const btnW = Math.floor((width - 24 * 2 - 12) / 2);
-  const btnH = 120;
+
+  const buttons = [
+    { path: "/logs", icon: "./demo/gateway/assets/nav_icon/event_log.png", text: t("header.eventLog"), col: 0, row: 0 },
+    { path: "/device-info", icon: "./demo/gateway/assets/nav_icon/device_info.png", text: t("header.deviceInfo"), col: 1, row: 0 },
+    { path: "/device-status", icon: "./demo/gateway/assets/nav_icon/device_status.png", text: t("header.deviceStatus"), col: 0, row: 1 },
+    { path: "/settings", icon: "./demo/gateway/assets/nav_icon/settings.png", text: t("header.settings"), col: 1, row: 1 },
+  ];
 
   return (
     <View style={style.pageRoot}>
-      <View style={style.header}>
-        <Text style={style.title}>{t("home.title")}</Text>
-      </View>
 
       <View style={style.grid}>
-        <Button
-          autoFocus
-          style={[style.button, { width: btnW, height: btnH }]}
-          onFocusedStyle={style.focused}
-          onClick={() => navigate("/logs")}
-          addToFocusGroup
-        >
-          <View style={style.buttonContent}>
-            <Text style={style.icon}>📋</Text>
-            <Text style={style.buttonText}>{t("header.eventLog")}</Text>
+        {buttons.map((btn, index) => (
+          <View
+            key={btn.path}
+            autoFocus={index === 0}
+            style={[
+              style.button, 
+              {
+                "grid-column-pos": btn.col,
+                "grid-row-pos": btn.row,
+              },
+            ]}
+            addToFocusGroup
+            onFocusedStyle={style.focused}
+            onClick={() => navigate(btn.path)}
+          >
+            {/* <View style={style.buttonContent}> */}
+              <Image src={btn.icon} style={style.image} />
+              <Text style={style.buttonText}>{btn.text}</Text>
+            {/* </View> */}
           </View>
-        </Button>
-        <Button
-          style={[style.button, { width: btnW, height: btnH }]}
-          onFocusedStyle={style.focused}
-          onClick={() => navigate("/device-info")}
-          addToFocusGroup
-        >
-          <View style={style.buttonContent}>
-            <Text style={style.icon}>ℹ️</Text>
-            <Text style={style.buttonText}>{t("header.deviceInfo")}</Text>
-          </View>
-        </Button>
-        <Button
-          style={[style.button, { width: btnW, height: btnH }]}
-          onFocusedStyle={style.focused}
-          onClick={() => navigate("/device-status")}
-          addToFocusGroup
-        >
-          <View style={style.buttonContent}>
-            <Text style={style.icon}>📊</Text>
-            <Text style={style.buttonText}>{t("header.deviceStatus")}</Text>
-          </View>
-        </Button>
-        <Button
-          style={[style.button, { width: btnW, height: btnH }]}
-          onFocusedStyle={style.focused}
-          onClick={() => navigate("/settings")}
-          addToFocusGroup
-        >
-          <View style={style.buttonContent}>
-            <Text style={style.icon}>⚙️</Text>
-            <Text style={style.buttonText}>{t("header.settings")}</Text>
-          </View>
-        </Button>
+        ))}
       </View>
     </View>
   );
@@ -93,19 +74,20 @@ const style: Record<string, any> = {
     width,
     height: height - 80,
     padding: "24px",
-    display: "flex",
-    "flex-direction": "row",
-    "flex-wrap": "wrap",
-    "justify-content": "space-between",
-    "align-content": "flex-start",
+    display: "grid",
+    "grid-template-columns": `${colWidth} ${colWidth}`,
+    "grid-template-rows": `${rowHeight} ${rowHeight}`,
+    gap: 12,
   },
   button: {
     "background-color": "0x1d1d1d",
     "border-radius": 16,
-    margin: "0 0 12px 0",
     display: "flex",
     "align-items": "center",
     "justify-content": "center",
+    "grid-child": true,
+    "align-self": "stretch",
+    "justify-self": "stretch"
   },
   buttonContent: {
     display: "flex",
@@ -122,6 +104,10 @@ const style: Record<string, any> = {
     "font-size": 16,
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
+  },
+  image: {
+    width: 'auto',
+    height: 'auto',
   },
 };

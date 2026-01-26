@@ -22,7 +22,7 @@ export function DeviceStatusPage() {
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
-      <Header title={t("deviceStatus.title")} />
+      <Header title={t("deviceStatus.title")} backIcon={"./demo/gateway/assets/nav_icon/device_status.png"} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
@@ -34,8 +34,8 @@ export function DeviceStatusPage() {
               onFocusedStyle={style.focused}
               style={style.statusItem}
             >
-              <Text style={style.label}>{item.label}</Text>
               <Text style={style.value}>{item.value}</Text>
+              <Text style={style.label}>{item.label}</Text>
             </View>
           ))}
         </View>
@@ -74,26 +74,28 @@ const style: Record<string, any> = {
   },
   statusItem: {
     width: "100%",
-    height: 60,
+    height: 160,
     "border-radius": 10,
     "background-color": "0x2a2a2a",
     margin: "0 0 8px 0",
-    padding: "0 16px",
+    padding: "16px",
     display: "flex",
-    "flex-direction": "row",
-    "align-items": "center",
-    "justify-content": "space-between",
+    "flex-direction": "column",
+    "align-items": "flex-start",
+    "justify-content": "flex-start",
     "scroll-on-focus": 1,
   },
   label: {
-    "text-color": "0xb0b0b0",
+    "text-color": "white",
     "font-size": 14,
+    "margin-bottom": 8,
   },
   value: {
     "text-color": "white",
-    "font-size": 14,
+    "font-size": 24,
+    "font-weight": "bold",
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
 };

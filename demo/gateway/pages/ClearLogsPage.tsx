@@ -24,7 +24,7 @@ export function ClearLogsPage() {
 
   return (
     <View style={style.pageRoot} onCancel={handleCancel}>
-      <Header title={t("clearLogs.title")} />
+      <Header title={t("clearLogs.title")} backIcon={"./demo/gateway/assets/nav_icon/clear_logs.png"} />
       {showDialog && (
         <ConfirmDialog
           title={t("clearLogs.confirm")}

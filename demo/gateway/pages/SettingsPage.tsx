@@ -19,7 +19,7 @@ export function SettingsPage() {
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
-      <Header title={t("settings.title")} />
+      <Header title={t("settings.title")} backIcon={"./demo/gateway/assets/nav_icon/settings.png"} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>

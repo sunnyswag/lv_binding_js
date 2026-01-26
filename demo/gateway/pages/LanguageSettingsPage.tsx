@@ -18,7 +18,7 @@ export function LanguageSettingsPage() {
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
-      <Header title={t("language.title")} />
+      <Header title={t("language.title")} backIcon={"./demo/gateway/assets/nav_icon/language.png"} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
@@ -88,7 +88,7 @@ const style: Record<string, any> = {
     "scroll-on-focus": 1,
   },
   langItemSelected: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
   langText: {
     "text-color": "white",
@@ -99,6 +99,6 @@ const style: Record<string, any> = {
     "font-size": 18,
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
 };

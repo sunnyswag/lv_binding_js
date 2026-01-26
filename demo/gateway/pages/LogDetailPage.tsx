@@ -94,6 +94,6 @@ const style: Record<string, any> = {
     "font-size": 14,
   },
   focused: {
-    "background-color": "0x4267FF",
+    "background-color": "#4660FF",
   },
 };
