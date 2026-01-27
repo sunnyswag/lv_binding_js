@@ -115,3 +115,5 @@ export function ProcessDeg(key, value, result) {
 export function ProcessBoolean(key, value, result) {
   result[key] = !!value;
 }
+
+export const CreateStyle = <T extends Record<string, any>>(styles: T): { [K in keyof T]: any } => styles;

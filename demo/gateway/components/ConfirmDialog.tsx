@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, View, Dimensions } from "lvgljs-ui";
+import { Button, Text, View, Dimensions, CreateStyle } from "lvgljs-ui";
 
 const { width, height } = Dimensions.window;
 
@@ -46,7 +46,7 @@ export function ConfirmDialog({
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   overlay: {
     position: "absolute",
     width,
@@ -96,4 +96,4 @@ const style: Record<string, any> = {
     "border-width": 3,
     "border-color": "#4660FF",
   },
-};
+});

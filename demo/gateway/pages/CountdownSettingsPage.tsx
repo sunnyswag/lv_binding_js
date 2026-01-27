@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Arc, Dimensions, Text, useT, View } from "lvgljs-ui";
+import { Arc, CreateStyle, Dimensions, Text, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
@@ -50,7 +50,7 @@ export function CountdownSettingsPage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -91,4 +91,4 @@ const style: Record<string, any> = {
     "font-size": 26,
     "padding-top": 20,
   },
-};
+});

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dimensions, Image, Text, useT, View } from "lvgljs-ui";
+import { Dimensions, CreateStyle, Image, Text, useT, View } from "lvgljs-ui";
 import { useNavigate } from "react-router";
 
 const { width, height } = Dimensions.window;
@@ -45,7 +45,7 @@ export function HomePage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   grid: {
     width,
     height,
@@ -84,4 +84,4 @@ const style: Record<string, any> = {
     width: 'auto',
     height: 'auto',
   },
-};
+});

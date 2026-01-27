@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, View, useT } from "lvgljs-ui";
+import { CreateStyle, Image, Text, View } from "lvgljs-ui";
 
 interface HeaderProps {
   title: string;
@@ -15,7 +15,7 @@ export function Header({ title, backIcon }: HeaderProps) {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   header: {
     width: "100%",
     height: 52,
@@ -33,4 +33,4 @@ const style: Record<string, any> = {
     "text-color": "white",
     "font-size": 16,
   },
-};
+});

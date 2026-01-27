@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router";
-import { Dimensions, Text, useT, View } from "lvgljs-ui";
+import { CreateStyle, Dimensions, Text, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
@@ -42,7 +42,7 @@ export function DeviceStatusPage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -88,4 +88,4 @@ const style: Record<string, any> = {
   focused: {
     "background-color": "#4660FF",
   },
-};
+});

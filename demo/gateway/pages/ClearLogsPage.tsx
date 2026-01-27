@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Dimensions, useT, View } from "lvgljs-ui";
+import { CreateStyle, Dimensions, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 
@@ -38,7 +38,7 @@ export function ClearLogsPage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -48,4 +48,4 @@ const style: Record<string, any> = {
     "flex-direction": "column",
     overflow: "hidden",
   },
-};
+});

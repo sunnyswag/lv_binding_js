@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { Dimensions, useT, View } from "lvgljs-ui";
+import { CreateStyle, Dimensions, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 import { ListItem } from "../components/ListItem";
 
@@ -37,7 +37,7 @@ export function LogListPage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -65,4 +65,4 @@ const style: Record<string, any> = {
     display: "flex",
     "flex-direction": "column",
   },
-};
+});

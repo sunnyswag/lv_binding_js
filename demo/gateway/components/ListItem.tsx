@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, useT, View } from "lvgljs-ui";
+import { CreateStyle, Image, Text, useT, View } from "lvgljs-ui";
 
 interface ListItemProps {
   title: string;
@@ -42,7 +42,7 @@ export function ListItem({
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   listItem: {
     width: "100%",
     height: 60,
@@ -90,4 +90,4 @@ const style: Record<string, any> = {
   focused: {
     "background-color": "#4660FF",
   },
-};
+});

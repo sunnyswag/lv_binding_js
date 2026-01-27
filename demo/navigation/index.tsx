@@ -4,6 +4,7 @@ import {
   Arc,
   Button,
   Checkbox,
+  CreateStyle,
   Dimensions,
   I18nProvider,
   Render,
@@ -368,7 +369,7 @@ function Root() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -651,7 +652,7 @@ const style: Record<string, any> = {
     "justify-content": "center",
   },
   homeBtnText: { "text-color": "white", "font-size": 16 },
-};
+});
 
 Render.render(<Root />);
 

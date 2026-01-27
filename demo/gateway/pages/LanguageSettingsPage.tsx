@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Dimensions, Image, Text, useI18n, useT, View } from "lvgljs-ui";
+import { CreateStyle, Dimensions, Image, Text, useI18n, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
@@ -43,7 +43,7 @@ export function LanguageSettingsPage() {
   );
 }
 
-const style: Record<string, any> = {
+const style = CreateStyle({
   pageRoot: {
     width,
     height,
@@ -98,4 +98,4 @@ const style: Record<string, any> = {
   focused: {
     "background-color": "#4660FF",
   },
-};
+});
