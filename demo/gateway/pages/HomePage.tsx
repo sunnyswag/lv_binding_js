@@ -4,8 +4,8 @@ import { useNavigate } from "react-router";
 
 const { width, height } = Dimensions.window;
 
-const colWidth = (width - 24 * 2 - 12) / 2;
-const rowHeight = (height - 80 - 24 * 2 - 12) / 2;
+const colWidth = (width - 12 * 2 - 12) / 2;
+const rowHeight = (height - 12 * 2 - 12) / 2;
 
 export function HomePage() {
   const t = useT();
@@ -19,65 +19,41 @@ export function HomePage() {
   ];
 
   return (
-    <View style={style.pageRoot}>
-
-      <View style={style.grid}>
-        {buttons.map((btn, index) => (
-          <View
-            key={btn.path}
-            autoFocus={index === 0}
-            style={[
-              style.button, 
-              {
-                "grid-column-pos": btn.col,
-                "grid-row-pos": btn.row,
-              },
-            ]}
-            addToFocusGroup
-            onFocusedStyle={style.focused}
-            onClick={() => navigate(btn.path)}
-          >
-            {/* <View style={style.buttonContent}> */}
-              <Image src={btn.icon} style={style.image} />
-              <Text style={style.buttonText}>{btn.text}</Text>
-            {/* </View> */}
-          </View>
-        ))}
-      </View>
+    <View style={style.grid}>
+      {buttons.map((btn, index) => (
+        <View
+          key={btn.path}
+          autoFocus={index === 0}
+          style={[
+            style.button, 
+            {
+              "grid-column-pos": btn.col,
+              "grid-row-pos": btn.row,
+            },
+          ]}
+          addToFocusGroup
+          onFocusedStyle={style.focused}
+          onClick={() => navigate(btn.path)}
+        >
+          {/* <View style={style.buttonContent}> */}
+            <Image src={btn.icon} style={style.image} />
+            <Text style={style.buttonText}>{btn.text}</Text>
+          {/* </View> */}
+        </View>
+      ))}
     </View>
   );
 }
 
 const style: Record<string, any> = {
-  pageRoot: {
-    width,
-    height,
-    padding: 0,
-    "background-color": "black",
-    display: "flex",
-    "flex-direction": "column",
-    overflow: "hidden",
-  },
-  header: {
-    width,
-    height: 80,
-    padding: "24px 24px 0 24px",
-    display: "flex",
-    "align-items": "center",
-    "justify-content": "center",
-  },
-  title: {
-    "text-color": "white",
-    "font-size": 24,
-  },
   grid: {
     width,
-    height: height - 80,
-    padding: "24px",
+    height,
+    padding: "12px",
     display: "grid",
+    "background-color": "black",
     "grid-template-columns": `${colWidth} ${colWidth}`,
     "grid-template-rows": `${rowHeight} ${rowHeight}`,
-    gap: 12,
   },
   button: {
     "background-color": "#FFFFFF33",
@@ -95,9 +71,6 @@ const style: Record<string, any> = {
     "align-items": "center",
     "justify-content": "center",
     gap: 8,
-  },
-  icon: {
-    "font-size": 32,
   },
   buttonText: {
     "text-color": "white",
