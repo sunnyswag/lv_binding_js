@@ -90,25 +90,10 @@ export const commonSetters = {
       oldStyleSheet: oldProps.style,
     });
   },
-  align(comp, { type, pos = [0, 0] }, oldProps) {
-    if (
-      !type ||
-      (type === oldProps.align?.type &&
-        pos?.[0] === oldProps.align?.pos?.[0] &&
-        pos?.[1] === oldProps.align?.pos?.[1])
-    )
-      return;
+  align(comp, { type, pos = [0, 0] }) {
     comp.align(type, pos);
   },
-  alignTo(comp, { type, pos = [0, 0], parent }, oldProps) {
-    if (
-      !type ||
-      (type === oldProps.alignTo?.type &&
-        pos?.[0] === oldProps.alignTo?.pos?.[0] &&
-        pos?.[1] === oldProps.alignTo?.pos?.[1] &&
-        parent?.uid === oldProps.alignTo?.parent?.uid)
-    )
-      return;
+  alignTo(comp, { type, pos = [0, 0], parent }) {
     comp.alignTo(type, pos, parent);
   },
   scrollbarStyle(comp, styleSheet, compName, oldProps) {
@@ -206,8 +191,6 @@ export function setComponentProps(
       setter(comp, value, oldProps);
     } else if (setter.length === 4) {
       setter(comp, value, compName, oldProps);
-    } else {
-      setter();
     }
   }
   

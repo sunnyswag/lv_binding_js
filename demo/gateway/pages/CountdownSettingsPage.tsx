@@ -20,7 +20,7 @@ export function CountdownSettingsPage() {
   }, []);
 
   const elapsed = total - remain;
-  const angle = Math.floor((elapsed / total) * 360);
+  const angle = Math.floor((1 - elapsed / total) * 360);
 
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
@@ -34,9 +34,9 @@ export function CountdownSettingsPage() {
           range={[0, total]}
           value={elapsed}
           rotation={270}
-          backgroundStartAngle={0}
-          backgroundEndAngle={360}
-          startAngle={0}
+          backgroundStartAngle={360}
+          backgroundEndAngle={0}
+          startAngle={360}
           endAngle={angle}
           mode="normal"
           changeRate={360}
@@ -73,13 +73,13 @@ const style: Record<string, any> = {
     width: 220,
     height: 220,
     "arc-width": 18,
-    "arc-color": "red",
+    "arc-color": "black",
     "arc-rounded": true,
     "background-color": "black",
   },
   arcIndicator: {
     "arc-width": 18,
-    "arc-color": "#4660FF",
+    "arc-color": "white",
     "arc-rounded": true,
   },
   arcKnobHidden: {
