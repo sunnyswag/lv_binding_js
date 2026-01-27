@@ -105,6 +105,7 @@ const style = CreateStyle({
     "background-color": "0x2a2a2a",
     display: "flex",
     "flex-direction": "column",
+    "padding": "12px",
   },
   ethTitle: {
     "text-color": "white",
@@ -113,6 +114,8 @@ const style = CreateStyle({
   },
   ethSectionFocused: {
     "background-color": "#4660FF",
+    "border-radius": 12,
+    "padding": "12px",
   },
   ethContent: {
     width: "100%",
@@ -132,14 +135,10 @@ const style = CreateStyle({
     "align-items": "center",
     "justify-content": "space-between",
   },
-  label: {
-    "text-color": "0xb0b0b0",
-    "font-size": 14,
-    "flex": 1,
-  },
   value: {
-    "text-color": "white",
-    "font-size": 14,
+    "text-color": "#FFFFFF",
+    "opacity": 0.8,
+    "font-size": 16,
     "font-weight": "normal",
     "text-align": "right",
   },

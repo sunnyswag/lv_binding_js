@@ -46,10 +46,9 @@ const style = CreateStyle({
   listItem: {
     width: "100%",
     height: 60,
-    "border-radius": 10,
     "background-color": "0x2a2a2a",
     margin: "0 0 8px 0",
-    padding: "0 16px",
+    padding: "0 12px",
     display: "flex",
     "flex-direction": "row",
     "align-items": "center",
@@ -88,6 +87,8 @@ const style = CreateStyle({
     margin: "0 0 0 12px",
   },
   focused: {
+    padding: "0 12px",
+    "border-radius": 12,
     "background-color": "#4660FF",
   },
 });

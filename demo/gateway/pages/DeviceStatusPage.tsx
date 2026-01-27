@@ -55,7 +55,7 @@ const style = CreateStyle({
   scrollBox: {
     width: width,
     height: height - 24,
-    padding: 8,
+    padding: 12,
     "background-color": "0x101010",
     overflow: 0,
     "overflow-scrolling": 1,
@@ -65,10 +65,9 @@ const style = CreateStyle({
   statusItem: {
     width: "100%",
     height: 160,
-    "border-radius": 10,
     "background-color": "0x2a2a2a",
     margin: "0 0 8px 0",
-    padding: "16px",
+    padding: "12px",
     display: "flex",
     "flex-direction": "column",
     "align-items": "flex-start",
@@ -77,6 +76,7 @@ const style = CreateStyle({
   },
   label: {
     "text-color": "white",
+    "opacity": 0.8,
     "font-size": 14,
     "margin-bottom": 8,
   },
@@ -86,6 +86,8 @@ const style = CreateStyle({
     "font-weight": "bold",
   },
   focused: {
+    padding: 12,
+    "border-radius": 12,
     "background-color": "#4660FF",
   },
 });
