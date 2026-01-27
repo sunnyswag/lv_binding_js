@@ -60,7 +60,6 @@ const style: Record<string, any> = {
     display: "flex",
     width: 'auto',
     height: 'auto',
-    "background-opacity": 0,
     "flex-direction": "row",
     "align-items": "center",
     "flex": 1,

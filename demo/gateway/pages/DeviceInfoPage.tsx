@@ -117,7 +117,6 @@ const style: Record<string, any> = {
   ethContent: {
     width: "100%",
     height: 'auto',
-    "background-opacity": 0,
     display: "flex",
     "flex-direction": "column",
   },

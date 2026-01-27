@@ -80,7 +80,7 @@ const style: Record<string, any> = {
     gap: 12,
   },
   button: {
-    "background-color": "0x1d1d1d",
+    "background-color": "#FFFFFF33",
     "border-radius": 16,
     display: "flex",
     "align-items": "center",
@@ -105,6 +105,7 @@ const style: Record<string, any> = {
   },
   focused: {
     "background-color": "#4660FF",
+    "border-radius": 16,
   },
   image: {
     width: 'auto',
