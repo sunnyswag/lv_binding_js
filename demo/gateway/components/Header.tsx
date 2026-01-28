@@ -1,5 +1,6 @@
 import React from "react";
 import { CreateStyle, Image, Text, View } from "lvgljs-ui";
+import { useNavigate } from "react-router";
 
 interface HeaderProps {
   title: string;
@@ -7,8 +8,10 @@ interface HeaderProps {
 }
 
 export function Header({ title, backIcon }: HeaderProps) {
+  const navigate = useNavigate();
   return (
     <View style={style.header}>
+      <Image src="left" style={style.headerIcon} onClick={() => navigate(-1)} />
       {backIcon && <Image src={backIcon} style={style.headerIcon} />}
       <Text style={style.headerTitle}>{title}</Text>
     </View>
@@ -28,6 +31,8 @@ const style = CreateStyle({
   headerIcon: {
     width: 'auto',
     height: 'auto',
+    "text-color": "white",
+    "font-size": 18,
   },
   headerTitle: {
     "text-color": "white",
