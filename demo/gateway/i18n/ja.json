@@ -12,7 +12,9 @@
       "title": "Event Log [ja]",
       "alerts": "Alerts [ja]",
       "notification": "Notification [ja]",
-      "detail": "Log Detail [ja]"
+      "detail": "Log Detail [ja]",
+      "prevPage": "前のページ",
+      "nextPage": "次のページ"
     },
     "deviceInfo": {
       "title": "Device Info [ja]"

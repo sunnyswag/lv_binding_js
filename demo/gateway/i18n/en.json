@@ -12,7 +12,9 @@
     "title": "Event Log",
     "alerts": "Alerts",
     "notification": "Notification",
-    "detail": "Log Detail"
+    "detail": "Log Detail",
+    "prevPage": "Previous Page",
+    "nextPage": "Next Page"
   },
   "deviceInfo": {
     "title": "Device Info"

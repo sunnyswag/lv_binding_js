@@ -12,7 +12,9 @@
     "title": "Event Log [zh]",
     "alerts": "Alerts [zh]",
     "notification": "Notification [zh]",
-    "detail": "Log Detail [zh]"
+    "detail": "Log Detail [zh]",
+    "prevPage": "上一页",
+    "nextPage": "下一页"
   },
   "deviceInfo": {
     "title": "Device Info [zh]"
