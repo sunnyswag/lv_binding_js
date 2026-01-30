@@ -1,26 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { CreateStyle, Dimensions, Text, useT, View } from "lvgljs-ui";
+import { CreateStyle, Dimensions, Text, useFocusGroupEdge, useT, View } from "lvgljs-ui";
 import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.window;
 
-const PAGE_SIZE = 5;
-const ITEM_EACH_PAGE = 20;
-const TOTAL_ITEMS = ITEM_EACH_PAGE * PAGE_SIZE;
-
-function NavItem({ text, onClick }: { text: string, onClick: () => void }) {
-  return (
-    <View
-      addToFocusGroup
-      onFocusedStyle={style.navFocused}
-      style={style.navItem}
-      onClick={onClick}
-    >
-      <Text style={style.navText}>{text}</Text>
-    </View>
-  );
-}
+const TOTAL_PAGES = 5;
+const ITEMS_PER_PAGE = 20;
+const TOTAL_ITEMS = ITEMS_PER_PAGE * TOTAL_PAGES;
 
 export function LogDetailPage() {
   const t = useT();
@@ -45,12 +32,24 @@ export function LogDetailPage() {
   }, [logId]);
 
   const isFirstPage = currentPage <= 1;
-  const isLastPage = currentPage >= PAGE_SIZE;
+  const isLastPage = currentPage >= TOTAL_PAGES;
 
   const currentPageData = useMemo(() => {
-    const start = (currentPage - 1) * ITEM_EACH_PAGE;
-    return allLogDetails.slice(start, start + ITEM_EACH_PAGE);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return allLogDetails.slice(start, start + ITEMS_PER_PAGE);
   }, [allLogDetails, currentPage]);
+
+  useFocusGroupEdge({
+    onEdge: (edgeDirection) => {
+      if (edgeDirection === "next" && !isLastPage) {
+        setDirection("next");
+        setCurrentPage((p) => p + 1);
+      } else if (edgeDirection === "prev" && !isFirstPage) {
+        setDirection("prev");
+        setCurrentPage((p) => p - 1);
+      }
+    }
+  });
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -59,52 +58,30 @@ export function LogDetailPage() {
     return () => clearTimeout(id);
   }, [currentPage, direction]);
 
-  const goPrevPage = () => {
-    if (!isFirstPage) {
-      setDirection("prev");
-      setCurrentPage((p) => p - 1);
-    }
-  };
-
-  const goNextPage = () => {
-    if (!isLastPage) {
-      setDirection("next");
-      setCurrentPage((p) => p + 1);
-    }
-  };
-
   return (
     <View style={style.pageRoot} onCancel={() => navigate(-1)}>
       <Header title={t("logs.detail")} />
 
       <View style={style.content}>
         <View style={style.scrollBox}>
-          {!isFirstPage && (
-            <NavItem text={t("logs.prevPage")} onClick={goPrevPage} />
-          )}
-
-          {Array.from({ length: ITEM_EACH_PAGE }).map((_, index) => (
-              <View
-                key={index}
-                ref={(el: any) => { 
-                  if (direction === "next" && index === 0) {
-                    focusItemRef.current = el;
-                  } else if (direction === "prev" && index === ITEM_EACH_PAGE - 1) {
-                    focusItemRef.current = el;
-                  }
-                 }}
-                autoFocus={index === 0 && isFirstPage}
-                addToFocusGroup
-                onFocusedStyle={style.focused}
-                style={style.logItem}
-              >
-                <Text style={style.logText}>{currentPageData[index]?.content ?? ""}</Text>
-              </View>
+          {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+            <View
+              key={index}
+              ref={(el: any) => { 
+                if (direction === "next" && index === 0) {
+                  focusItemRef.current = el;
+                } else if (direction === "prev" && index === ITEMS_PER_PAGE - 1) {
+                  focusItemRef.current = el;
+                }
+               }}
+              autoFocus={index === 0 && isFirstPage}
+              addToFocusGroup
+              onFocusedStyle={style.focused}
+              style={style.logItem}
+            >
+              <Text style={style.logText}>{currentPageData[index]?.content ?? ""}</Text>
+            </View>
           ))}
-
-          {!isLastPage && (
-            <NavItem text={t("logs.nextPage")} onClick={goNextPage} />
-          )}
         </View>
       </View>
     </View>
@@ -138,25 +115,6 @@ const style = CreateStyle({
     "overflow-scrolling": 1,
     display: "flex",
     "flex-direction": "column",
-  },
-  navItem: {
-    width: "100%",
-    "min-height": 48,
-    "border-radius": 10,
-    "background-color": "0x333333",
-    margin: "0 0 8px 0",
-    padding: "12px 16px",
-    display: "flex",
-    "align-items": "center",
-    "justify-content": "center",
-    "scroll-on-focus": 1,
-  },
-  navText: {
-    "text-color": "white",
-    "font-size": 14,
-  },
-  navFocused: {
-    "background-color": "#4660FF",
   },
   logItem: {
     width: "100%",

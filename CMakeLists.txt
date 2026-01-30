@@ -39,6 +39,7 @@ set(LVGLJS_SOURCES
     src/render/native/core/img/img.cpp
     src/render/native/core/utils/utils.hpp
     src/render/native/core/animate/animate.cpp
+    src/render/native/core/focus_group/focus_group.cpp
     src/render/native/components/arc/arc.cpp
     src/render/native/components/arc/arc_wrap.cpp
     src/render/native/components/mask/mask.cpp

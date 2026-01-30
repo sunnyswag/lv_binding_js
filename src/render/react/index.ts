@@ -77,5 +77,7 @@ export { Dimensions } from "./core/dimensions";
 export { BUILT_IN_SYMBOL } from "./core/style/symbol";
 export { Theme } from "./core/theme";
 export { CreateStyle } from "./core/style/util";
+export { useFocusGroupEdge, setFocusGroupWrap } from "./core/focus-group";
+export type { EdgeDirection, UseFocusGroupEdgeOptions } from "./core/focus-group";
 
 export const Render = Renderer;
