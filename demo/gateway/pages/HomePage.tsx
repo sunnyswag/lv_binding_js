@@ -13,8 +13,8 @@ export function HomePage() {
 
   const buttons = [
     { path: "/logs", icon: "./demo/gateway/assets/nav_icon/event_log.png", text: t("header.eventLog"), col: 0, row: 0 },
-    { path: "/device-info", icon: "./demo/gateway/assets/nav_icon/device_info.png", text: t("header.deviceInfo"), col: 1, row: 0 },
-    { path: "/device-status", icon: "./demo/gateway/assets/nav_icon/device_status.png", text: t("header.deviceStatus"), col: 0, row: 1 },
+    { path: "/device-info", icon: "./demo/gateway/assets/nav_icon/device_info.png", text: t("header.deviceInfo"), col: 0, row: 1 },
+    { path: "/device-status", icon: "./demo/gateway/assets/nav_icon/device_status.png", text: t("header.deviceStatus"), col: 1, row: 0 },
     { path: "/settings", icon: "./demo/gateway/assets/nav_icon/settings.png", text: t("header.settings"), col: 1, row: 1 },
   ];
 
@@ -33,7 +33,7 @@ export function HomePage() {
           ]}
           addToFocusGroup
           onFocusedStyle={style.focused}
-          onClick={() => navigate(btn.path)}
+          onClick={() => navigate(btn.path, { state: { from: "home", to: btn.path } })}
         >
           {/* <View style={style.buttonContent}> */}
             <Image src={btn.icon} style={style.image} />
