@@ -59,6 +59,7 @@ export function useFocusGroupEdge(options: UseFocusGroupEdgeOptions) {
     FocusGroup.setEdgeCallback(handler);
 
     return () => {
+      FocusGroup.setWrap(true);
       FocusGroup.setEdgeCallback(null);
     };
   }, [wrap]);
