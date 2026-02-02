@@ -6,12 +6,12 @@ import { Header } from "../components/Header";
 const { width, height } = Dimensions.window;
 
 const TOTAL_ITEMS = 10;
-function checkIndex(index: number) {
+function loopIndex(index: number) {
   if (index < 0) {
-    return 0;
+    return TOTAL_ITEMS - 1;
   }
   if (index >= TOTAL_ITEMS) {
-    return TOTAL_ITEMS - 1;
+    return 0;
   }
   return index;
 }
@@ -30,11 +30,8 @@ export function LogDetailPage() {
 
   useFocusGroupEdge({
     onEdge: (edgeDirection) => {
-      if (edgeDirection === "next") {
-        setCurrentIndex(checkIndex(currentIndex + 1));
-      } else if (edgeDirection === "prev") {
-        setCurrentIndex(checkIndex(currentIndex - 1));
-      }
+      const result = loopIndex(currentIndex + (edgeDirection === "next" ? 1 : -1));
+      setCurrentIndex(result);
     }
   });  
 
