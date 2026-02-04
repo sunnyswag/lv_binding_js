@@ -3,7 +3,7 @@
 
 # Build folders
 debug/
-build*/
+build/*
 dev_*/
 **/.cache/
 
