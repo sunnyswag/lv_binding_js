@@ -7,20 +7,20 @@ export type EdgeDirection = 'next' | 'prev';
 
 export interface UseFocusGroupEdgeOptions {
   /**
-   * 当焦点到达边缘时的回调
-   * @param direction 'next' 表示到达底部/右侧边缘，'prev' 表示到达顶部/左侧边缘
+   * Callback when focus reaches the edge.
+   * @param direction 'next' means bottom/right edge, 'prev' means top/left edge
    */
   onEdge: (direction: EdgeDirection) => void;
   
   /**
-   * 是否启用循环（到达边缘后是否回到另一端）
-   * 默认 false，这样才能触发 edge 回调
+   * Whether to enable wrap (focus wraps to the other end when reaching edge).
+   * Default false so that the edge callback can be triggered.
    */
   wrap?: boolean;
 }
 
 /**
- * 监听焦点组边缘事件
+ * Listen for focus group edge events
  * 
  * @example
  * ```tsx

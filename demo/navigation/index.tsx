@@ -498,7 +498,7 @@ const style = CreateStyle({
     "background-color": "white",
     opacity: 255,
   },
-  // 横向滚动容器
+  // Horizontal scroll container
   pager: {
     width,
     height: height - 80,
@@ -511,7 +511,7 @@ const style = CreateStyle({
     overflow: 0, // 0 -> add_flag(SCROLLABLE)
     "overflow-scrolling": 1,
 
-    "scroll-snap-x": 3, // LV_SCROLL_SNAP_CENTER（本仓库 lvgl: NONE=0 START=1 END=2 CENTER=3）
+    "scroll-snap-x": 3, // LV_SCROLL_SNAP_CENTER (this repo lvgl: NONE=0 START=1 END=2 CENTER=3)
   },
   page: {
     width,

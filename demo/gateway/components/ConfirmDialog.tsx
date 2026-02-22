@@ -15,8 +15,8 @@ export function ConfirmDialog({
   title,
   onConfirm,
   onCancel,
-  confirmText = "确认",
-  cancelText = "取消",
+  confirmText = "Confirm",
+  cancelText = "Cancel",
 }: ConfirmDialogProps) {
   return (
     <View style={style.overlay} onCancel={onCancel}>

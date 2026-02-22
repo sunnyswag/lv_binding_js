@@ -12,7 +12,7 @@ export function ClearLogsPage() {
   const [showDialog, setShowDialog] = useState(true);
 
   const handleConfirm = () => {
-    // 执行清除日志操作
+    // Perform clear logs action
     setShowDialog(false);
     navigate(-1);
   };
